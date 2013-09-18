@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{{article.link}}">{{article.title}}</a>
+
+<div class="moot" 
+     id="article-moot"
+     href="https://moot.it/i/labmeeting/articles/{{article.id}}">
+     {{article.title}}
+ </div>
+
+<script src="{{url_for('static', filename='js/article.js')}}"></script>
+{% endblock %}
+
