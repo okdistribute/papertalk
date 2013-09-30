@@ -1,7 +1,11 @@
 from flask import Flask, url_for
+from flask.ext.pymongo import PyMongo
 import os
 
 papertalk = Flask(__name__)
+papertalk.config.from_object('config.Config')
+
+mongo = PyMongo(papertalk)
 
 # Determines the destination of the build. Only usefull if you're using Frozen-Flask
 papertalk.config['FREEZER_DESTINATION'] = os.path.dirname(os.path.abspath(__file__))+'/../build'
