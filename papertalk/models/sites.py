@@ -1,7 +1,7 @@
 __author__ = 'karissamckelvey'
 from BeautifulSoup import BeautifulSoup
 from papertalk.utils import utils, scholar
-from papertalk.models.article import Article
+import article
 import re
 
 class Site(object):
@@ -21,7 +21,7 @@ class Site(object):
         html = utils.scrape(url)
         soup = BeautifulSoup(html)
 
-        article = Article()
+        article = article.Article()
         article["source_url"] = url
         return cls._scrape(soup, article)
 
