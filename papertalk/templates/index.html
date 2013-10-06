@@ -2,20 +2,31 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>Lab meeting</h1>
+    <h1>Papertalk</h1>
 </div>
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-6">
-        <h3>Enter a link to an article</h3>
+        <div class="col-lg-8 col-lg-offset-2">
+            <h4>Look for an article</h4>
             <div class="input-group">
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" id="articleInput" placeholder="e.g. collective dynamics of 'small-world' networks">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Go!</button>
+                    <button class="btn btn-primary" type="button" id="articleGo">Go!</button>
                 </span>
+
+
+                    <div id="status"></div>
             </div><!-- /input-group -->
+            <div id="papersites" class="panel-body">
+                <p class="muted">or enter a link from one of these services:</p>
+                 <img src="/static/img/google_scholar_logo.JPG" class="faded" id="scholar"/>
+                 <img src="/static/img/logo-mendeley.png" class="faded" id="mendeley"/>
+                 <img src="/static/img/ssrn-logo.png" class="faded" id="ssrn"/>
+            </div>
         </div><!-- /.col-lg-6 -->
     </div><!-- /.row -->
 </div>
+<script src="/static/js/site.js" type="text/javascript"></script>
+<script src="/static/js/main.js" type="text/javascript"></script>
 {% endblock %}
