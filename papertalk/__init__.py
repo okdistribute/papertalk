@@ -1,5 +1,6 @@
 from flask import Flask, url_for
 from flask.ext.pymongo import PyMongo
+from views import *
 import os
 
 papertalk = Flask(__name__)
@@ -16,4 +17,4 @@ papertalk.jinja_env.globals['static'] = (
 	lambda filename: url_for('static', filename = filename)
 )
 
-from papertalk import views
+from papertalk.views import article, main
