@@ -6,3 +6,53 @@
 #papersites > img {
     width: 150px;
 }
+
+html, body {
+    height: 100%;
+}
+
+.wrap {
+    min-height: 100%;
+    width: 900px;
+    margin: auto;
+}
+
+#main {
+    overflow:auto;
+	padding-bottom: 80px;
+    height:100%;
+
+}
+
+.center {
+    text-align: center;
+}
+
+#footer {
+    position: relative;
+	margin-top: -80px;
+	height: 80px;
+	clear:both;
+	background-color: #ecf0f1;
+	border-top: 1px solid #ddd;
+	padding-top:30px;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+.btn-primary {
+    border-color: #e67e22;
+    background-color: #e67e22;
+    background-image: none;
+}
+
+.btn-primary:hover {
+    border-color: #d35400;
+    background-color: #d35400;
+}
+
+.page-header h4 {
+    color: #34495e;
+}
