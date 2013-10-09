@@ -1,7 +1,7 @@
 from flask import render_template, request
-from papertalk.models.article import Article
 from papertalk import papertalk, mongo
 from papertalk.utils.utils import jsonify
+from papertalk.models.sites import Scholar
 
 @papertalk.route('/article/<int:id>')
 def article(id):
@@ -12,17 +12,33 @@ def article(id):
 @papertalk.route("/article/search")
 def article_search():
     """
-    Search the database, then mendeley, then scholar
+    Parses the article from a given search string.
+    This could be a title (most likely); or an author
     """
-    q = request.form.get("text")
+    text = request.args.get("query", "")
+    print text
+
+    ##TODO right now, it always assumes google scholar. need to cycle through sites
+    articles = Scholar.search(text=text)
+    print articles
+
+    return jsonify({"articles" : [a.as_json() for a in articles]})
 
 
 @papertalk.route('/article/url', methods=["POST"])
 def add_article():
+    """
+    Scrapes the url and returns a new article
+    """
     site = request.form.get("site")
-    print site
     url = request.form.get("url")
-    article = Article.from_url(url)
+
+    print site
+    print url
+
+    ##TODO right now, it always assumes google scholar. need to check which site it is and load appropriately
+    article = Scholar.scrape(url)
 
     return jsonify(article.attrs)
+
 

@@ -28,7 +28,7 @@ class Site(object):
     @classmethod
     def search(cls, text=None, title=None, author=None, year=None):
         """
-        Retrieve articles from search text, title, author, and/or year
+        Retrieve a list of articles from search text, title, author, and/or year
         """
         pass
 
@@ -60,6 +60,18 @@ class Scholar(Site):
 
         article.save()
         return article
+
+    @classmethod
+    def search(cls, text=None, title=None, author=None, year=None):
+        """
+        Returns a list of article(s) that match this search query
+        """
+        if not author:
+            author = ''
+
+        scholarQuerier = scholar.ScholarQuerier(author)
+        scholarQuerier.query(text)
+        return scholarQuerier.articles
 
 class Mendeley(Site):
 

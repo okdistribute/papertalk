@@ -65,54 +65,8 @@ import re
 import urllib
 import urllib2
 from BeautifulSoup import BeautifulSoup
+from papertalk.models.article import Article
 
-class Article():
-    """
-    A class representing articles listed on Google Scholar.  The class
-    provides basic dictionary-like behavior.
-    """
-    def __init__(self):
-        self.attrs = {'title':         [None, 'Title',          0],
-                      'url':           [None, 'URL',            1],
-                      'num_citations': [0,    'Citations',      2],
-                      'num_versions':  [0,    'Versions',       3],
-                      'url_citations': [None, 'Citations list', 4],
-                      'url_versions':  [None, 'Versions list',  5],
-                      'year':          [None, 'Year',           6]}
-
-    def __getitem__(self, key):
-        if key in self.attrs:
-            return self.attrs[key][0]
-        return None
-
-    def __setitem__(self, key, item):
-        if key in self.attrs:
-            self.attrs[key][0] = item
-        else:
-            self.attrs[key] = [item, key, len(self.attrs)]
-
-    def __delitem__(self, key):
-        if key in self.attrs:
-            del self.attrs[key]
-
-    def as_txt(self):
-        # Get items sorted in specified order:
-        items = sorted(self.attrs.values(), key=lambda item: item[2])
-        # Find largest label length:
-        max_label_len = max([len(str(item[1])) for item in items])
-        fmt = '%%%ds %%s' % max_label_len
-        return '\n'.join([fmt % (item[1], item[0]) for item in items])
-
-    def as_csv(self, header=False, sep='|'):
-        # Get keys sorted in specified order:
-        keys = [pair[0] for pair in \
-                    sorted([(key, val[2]) for key, val in self.attrs.items()],
-                           key=lambda pair: pair[1])]
-        res = []
-        if header:
-            res.append(sep.join(keys))
-        res.append(sep.join([unicode(self.attrs[key][0]) for key in keys]))
-        return '\n'.join(res)
 
 class ScholarParser():
     """

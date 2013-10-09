@@ -29,7 +29,7 @@ $("#articleGo").click () ->
             type: "POST"
             data:
                 site: site,
-                url: url
+                url: text
             error: () ->
                 alert("failed to grab article")
             success: (data) ->
@@ -38,7 +38,7 @@ $("#articleGo").click () ->
         $.ajax "/article/search",
             type: "GET"
             data:
-                text: text
+                query: text
             error: () ->
                 alert("failed to grab article")
             success: (data) ->

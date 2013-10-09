@@ -1,13 +1,10 @@
 from papertalk import mongo
-from papertalk.models.sites import Scholar
-
 
 class Article(object):
     """
     An article in papertalk.
     Title (str)
-    Author (str)
-    Publication Name (str)
+    Authors (list of str)
     Year (dt)
     Num citations (num)
     Full Citation (text)
@@ -16,26 +13,24 @@ class Article(object):
 
     def __init__(self):
         self.attrs = {'title':         None,
-                      'authors':       None,
+                      'authors':       [],
                       'source_url':    None,
                       'num_citations': 0,
                       'url_citations': None,
+                      'url_versions':  None,
+                      'num_versions':  0,
                       'year':          None,
-                      'direct_url':    None}
+                      'url':           None}
 
 
     def __getitem__(self, key):
-        if key in self.attrs:
-            return self.attrs[key]
-        return None
+        return self.attrs[key]
 
     def __setitem__(self, key, item):
-        if key in self.attrs:
-            self.attrs[key] = item
+        self.attrs[key] = item
 
     def __delitem__(self, key):
-        if key in self.attrs:
-            del self.attrs[key]
+        del self.attrs[key]
 
     def save(self):
         article = mongo.db.articles.find_one({"title" : self["title"],
@@ -49,23 +44,20 @@ class Article(object):
 
         return article_id
 
-def search(cls, text):
-    """
-    Parses the article from a given search string.
-    This could be a title (most likely); or an author
-    """
-    siteClass = Scholar
+    def as_txt(self):
+        # Get items sorted in specified order:
+        return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.attrs.iteritems()])
 
-    return siteClass.search(text=text)
+    def as_csv(self, header=False, sep='|'):
+        # Get keys sorted in specified order:
+        keys = [pair[0] for pair in \
+                    sorted([(key, val[2]) for key, val in self.attrs.items()],
+                           key=lambda pair: pair[1])]
+        res = []
+        if header:
+            res.append(sep.join(keys))
+        res.append(sep.join([unicode(self.attrs[key][0]) for key in keys]))
+        return '\n'.join(res)
 
-def from_url(cls, site, url):
-    """
-    Scrapes the url and returns a new article
-    """
-    ##TODO right now, it always assumes google scholar. need to check
-    ## which site it is and load appropriately
-    siteClass = Scholar
-
-
-    return siteClass.scrape(url)
-
+    def as_json(self):
+        return self.attrs
