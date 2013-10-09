@@ -4,7 +4,14 @@ from views import *
 import os
 
 papertalk = Flask(__name__)
-papertalk.config.from_object('config.Config')
+try:
+    papertalk.config.from_object('config.Config')
+except:
+    papertalk.config["MONGO_DATABASE"] = os.environ.get("MONGO_DATABASE")
+    papertalk.config["MONGO_PORT"] = os.environ.get("MONGO_PORT")
+    papertalk.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
+    papertalk.config["MONGO_USERNAME"] = os.environ.get("MONGO_USERNAME")
+    papertalk.config["MONGO_PASSWORD"] = os.environ.get("MONGO_PASSWORD")
 
 mongo = PyMongo(papertalk)
 
