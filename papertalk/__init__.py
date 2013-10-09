@@ -12,7 +12,6 @@ except:
     papertalk.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
     papertalk.config["MONGO_USERNAME"] = os.environ.get("MONGO_USERNAME")
     papertalk.config["MONGO_PASSWORD"] = os.environ.get("MONGO_PASSWORD")
-    print papertalk.config
 
 mongo = PyMongo(papertalk)
 
