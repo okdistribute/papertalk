@@ -9,7 +9,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['Flask', 'beautifulsoup', 'Flask-PyMongo', 'werkzeug'],
+    install_requires=['Flask', 'beautifulsoup', 'Flask-PyMongo', 'werkzeug', 'gunicorn', 'pymongo'],
     entry_points={
       'console_scripts': [
           'papertalk = papertalk.server:main',
