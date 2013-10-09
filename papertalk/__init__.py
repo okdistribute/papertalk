@@ -7,7 +7,7 @@ papertalk = Flask(__name__)
 try:
     papertalk.config.from_object('config.Config')
 except:
-    papertalk.config["MONGO_HOST"] = os.environ.get("MONGO_DATABASE")
+    papertalk.config["MONGO_HOST"] = os.environ.get("MONGO_HOST")
     papertalk.config["MONGO_PORT"] = os.environ.get("MONGO_PORT")
     papertalk.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
     papertalk.config["MONGO_USERNAME"] = os.environ.get("MONGO_USERNAME")
