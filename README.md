@@ -1,7 +1,12 @@
-papertalk
+Papertalk: Discuss scholarly articles online.
 =========
 
-Discuss scholarly articles online.
+Academic research is discussed all over the place - at conferences, in lab meetings, at departmental teas, on blogs, 
+on Twitter - but there is no home for these conversations on the web. 
+
+Papertalk is the place to go to discuss, criticize, and learn about academic research.
+
+### Pull Requests Welcome
 
 ## setup
 ```
@@ -26,3 +31,7 @@ $ grunt watch
 ```
 $ python server.py 
 ```
+
+much love,  
+[@karissamck](https://twitter.com/karissamck)  
+[@beaucronin](https://twitter.com/beaucronin)
