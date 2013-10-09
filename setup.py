@@ -1,5 +1,3 @@
-__author__ = 'Sahat'
-
 from setuptools import setup, find_packages
 
 setup(
