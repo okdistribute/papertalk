@@ -1,26 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="page-header center">
-    <h1>Papertalk</h1>
-    <h4>Discuss scholarly articles online</h4>
-</div>
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-8 col-lg-offset-2">
-            <h4>Search for an article</h4>
+        <div class="col-lg-9 col-lg-offset-2">
+            <div class="header">
+                <h1>
+                    <div class="title pull-left">papertalk</div>
+                    <img class="pull-right" src="/static/img/papertalk.png" />
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
             <div class="input-group">
-                <input type="text" class="form-control" id="articleInput" placeholder="e.g. collective dynamics of 'small-world' networks">
+                <input type="text" class="form-control" id="articleInput" placeholder="e.g. collective dynamics watts">
                 <span class="input-group-btn">
-                    <button class="btn btn-primary btn-large" type="button" id="articleGo">Go!</button>
+                    <button class="btn btn-primary btn-large" type="button" id="articleGo">search</button>
                 </span>
 
 
                     <div id="status"></div>
             </div><!-- /input-group -->
             <div id="papersites" class="panel-body">
-                <p class="muted">or enter a link from one of these services:</p>
+                <p class="muted">enter a title and author or a link from one of these services:</p>
                  <img src="/static/img/google_scholar_logo.JPG" class="faded" id="scholar"/>
                  <img src="/static/img/logo-mendeley.png" class="faded" id="mendeley"/>
                  <img src="/static/img/ssrn-logo.png" class="faded" id="ssrn"/>

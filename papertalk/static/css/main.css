@@ -13,8 +13,6 @@ html, body {
 
 .wrap {
     min-height: 100%;
-    width: 900px;
-    margin: auto;
 }
 
 #main {
@@ -39,7 +37,8 @@ html, body {
 }
 
 h1 {
-    color: #2c3e50;
+    color: #34495e;
+    text-rendering: optimizeLegibility;
 }
 
 .btn-primary {
@@ -53,6 +52,12 @@ h1 {
     background-color: #d35400;
 }
 
-.page-header h4 {
-    color: #34495e;
+.header {
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+}
+
+.title {
+    padding-top: 170px;
+    font-size: 80px;
 }
