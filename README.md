@@ -12,7 +12,7 @@ $ npm install
 
 ## config
 
-Edit the config.py to match your mongo database (yeah, you'll need one for yourself. try using a free mongolab sandbox)
+Edit the config.py to match your mongo database (yeah, you'll need one for yourself. try using a free [mongolab sandbox](www.mongolab.com))
 ```
 $ cp config_sample.py config.py
 ```
