@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+	<div id="wmd-button-bar" style="display:none"></div>
+	<input type="text" id="reaction-title"></input>
+	<textarea id="wmd-input">
+		Editor!!
+	</textarea>
+</div>
+<div id="wmd-preview"></div>
+
+<script src="{{url_for('static', filename='vendor/pagedown/Markdown.Converter.js')}}"></script>
+<script src="{{url_for('static', filename='vendor/pagedown/Markdown.Editor.js')}}"></script>
+<script src="{{url_for('static', filename='js/reaction_author.js')}}"></script>
+{% endblock %}
+

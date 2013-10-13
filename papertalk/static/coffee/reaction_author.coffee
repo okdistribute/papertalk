@@ -1,0 +1,5 @@
+converter = new Markdown.Converter()
+console.log(converter)
+editor = new Markdown.Editor(converter)
+console.log(editor)
+editor.run()

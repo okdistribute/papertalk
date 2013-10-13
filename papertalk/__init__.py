@@ -24,4 +24,4 @@ papertalk.jinja_env.globals['static'] = (
 	lambda filename: url_for('static', filename = filename)
 )
 
-from papertalk.views import article, main
+from papertalk.views import article, main, reaction
