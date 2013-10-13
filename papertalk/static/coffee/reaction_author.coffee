@@ -1,5 +1,20 @@
 converter = new Markdown.Converter()
-console.log(converter)
 editor = new Markdown.Editor(converter)
-console.log(editor)
 editor.run()
+
+$("#reactionSave").click () ->
+    title = $("#reaction-title").val()
+    text = $("#wmd-input").val()
+    $.ajax "/reaction/new",
+        type: "POST"
+        data:
+            title: title,
+            text: text
+        error: () ->
+            alert("failed to save article")
+        success: (data) ->
+            console.log(data)
+
+$("#reactionCancel").click () ->
+	console.log("not implemented")
+
