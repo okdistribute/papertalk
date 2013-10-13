@@ -3,13 +3,21 @@
 {% block content %}
 
 <div>
+	<h1>Write a reaction</h1>
+	<form class="form-horizontal" role="form">
 	<div id="wmd-button-bar" style="display:none"></div>
-	<input type="text" id="reaction-title"></input>
-	<textarea id="wmd-input">
-		Editor!!
-	</textarea>
+	<div class="control-group">
+		<input type="text" class="form-control" id="reaction-title" placeholder="Reaction Title"></input>
+	</div>
+	<div class="control-group" style="min-height: 20px;"></div>
+	<div class="form-group col-lg-6">
+		<textarea id="wmd-input" class="form-control" style="min-height: 400px; max-height: 400px;">
+Your reaction
+		</textarea>
+	</div>
+	<div id="wmd-preview" class="col-lg-6"></div>
+	</form>
 </div>
-<div id="wmd-preview"></div>
 
 <script src="{{url_for('static', filename='vendor/pagedown/Markdown.Converter.js')}}"></script>
 <script src="{{url_for('static', filename='vendor/pagedown/Markdown.Editor.js')}}"></script>
