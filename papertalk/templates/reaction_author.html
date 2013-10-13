@@ -5,18 +5,28 @@
 <div>
 	<h1>Write a reaction</h1>
 	<form class="form-horizontal" role="form">
-	<div id="wmd-button-bar" style="display:none"></div>
-	<div class="control-group">
-		<input type="text" class="form-control" id="reaction-title" placeholder="Reaction Title"></input>
-	</div>
-	<div class="control-group" style="min-height: 20px;"></div>
-	<div class="form-group col-lg-6">
-		<textarea id="wmd-input" class="form-control" style="min-height: 400px; max-height: 400px;">
+		<div id="wmd-button-bar" style="display:none"></div>
+		<div class="control-group">
+			<input type="text" class="form-control" id="reaction-title" placeholder="Reaction Title"></input>
+		</div>
+		<div class="input-group" style="min-height: 20px;"></div>
+		<div class="row">
+			<div class="col-lg-6">
+				<textarea id="wmd-input" class="form-control" style="min-height: 400px; max-height: 400px;">
 Your reaction
-		</textarea>
-	</div>
-	<div id="wmd-preview" class="col-lg-6"></div>
+</textarea>
+			</div>
+			<div id="wmd-preview" class="col-lg-6"></div>
+		</div>
+		<div class="input-group" style="min-height: 20px;"></div>
+		<div class="row">
+		    <!-- <span class="input-group-btn"> -->
+		        <button class="btn btn-primary btn-large" type="button" id="reactionSave">Save</button>
+		        <button class="btn btn-large" type="button" id="reactionCancel">Cancel</button>
+		    <!-- </span> -->
+		</div>
 	</form>
+
 </div>
 
 <script src="{{url_for('static', filename='vendor/pagedown/Markdown.Converter.js')}}"></script>
