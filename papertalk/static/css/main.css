@@ -61,3 +61,20 @@ h1 {
     padding-top: 170px;
     font-size: 80px;
 }
+
+@media (max-width: 780px) {
+
+    #papersites > img {
+        width: 75px;
+    }
+
+    .title {
+        font-size: 48px;
+        padding-top:100px;
+        padding-bottom:10px;
+    }
+
+    #logo {
+        width: 50px;
+    }
+}
