@@ -48,16 +48,5 @@ class Article(object):
         # Get items sorted in specified order:
         return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.attrs.iteritems()])
 
-    def as_csv(self, header=False, sep='|'):
-        # Get keys sorted in specified order:
-        keys = [pair[0] for pair in \
-                    sorted([(key, val[2]) for key, val in self.attrs.items()],
-                           key=lambda pair: pair[1])]
-        res = []
-        if header:
-            res.append(sep.join(keys))
-        res.append(sep.join([unicode(self.attrs[key][0]) for key in keys]))
-        return '\n'.join(res)
-
     def as_json(self):
         return self.attrs
