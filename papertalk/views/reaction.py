@@ -6,7 +6,7 @@ from papertalk.models.reaction import Reaction
 @papertalk.route('/reaction/<int:id>')
 def reaction(id):
     context = {}
-    context["reaction"] = mongo.db.find_one({"_id" : id})
+    context["reaction"] = mongo.db.reactions.find_one({"_id" : id})
     return render_template('reaction.html', **context)
 
 @papertalk.route('/reaction/new', methods=["GET", "POST"])
