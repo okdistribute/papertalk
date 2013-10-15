@@ -16,7 +16,7 @@
     "typeahead.js": "~0.9.3",
     "font-awesome": "~3.2.1",
     "bootstrap": "~3.0.0",
-    "pagedown": "https://github.com/ujifgc/pagedown"
+    "pagedown": "git@github.com:ujifgc/pagedown.git"
   },
   "resolutions": {
     "jquery": "~1.9"
