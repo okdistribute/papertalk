@@ -1,8 +1,9 @@
 __author__ = 'karissamckelvey'
 from BeautifulSoup import BeautifulSoup
 from papertalk.utils import utils, scholar
-import article
+from article import Article
 import re
+from papertalk.utils.mendeley import mendeley_client as mc
 
 class Site(object):
     """
@@ -21,8 +22,8 @@ class Site(object):
         html = utils.scrape(url)
         soup = BeautifulSoup(html)
 
-        article = article.Article()
-        article["source_url"] = url
+        article = Article()
+        article["source_urls"].append(url)
         return cls._scrape(soup, article)
 
     @classmethod
@@ -58,11 +59,12 @@ class Scholar(Site):
             article["num_citations"] = [int(c) for c in citations.a.string.split() if c.isdigit()][0]
             article["url_citations"] = citations.a["href"]
 
-        article.save()
+        #TODO: get doi
+
         return article
 
     @classmethod
-    def search(cls, text=None, title=None, author=None, year=None):
+    def search(cls, text=None, title=None, author=None, year=None, items=10):
         """
         Returns a list of article(s) that match this search query
         """
@@ -75,15 +77,58 @@ class Scholar(Site):
 
 class Mendeley(Site):
 
+    client = mc.create_client()
+
     @classmethod
     def _scrape(cls, soup, article):
         ##TODO
         pass
 
     @classmethod
-    def search(cls, text=None, title=None, author=None, year=None):
-        ##TODO
-        pass
+    def _parse(cls, response):
+        """
+        returns a list of articles after parsing the response
+        article := {u'authors': [{u'forename': u'James G',
+                       u'surname': u'Thomson'},
+                      {u'forename': u'Ronald',
+                       u'surname': u'Chan'},
+                      {u'forename': u'Roger',
+                       u'surname': u'Thilmony'},
+                      {u'forename': u'Yuan-Yeu',
+                       u'surname': u'Yau'},
+                      {u'forename': u'David W',
+                       u'surname': u'Ow'}],
+                 u'doi': u'10.1186/1472-6750-10-17',
+                 u'mendeley_url': u'http://www.mendeley.com/research/phic31-recombination-system-demonstrates-heritable-germinal-transmission-site-specific-excision-arab/',
+                 u'publication_outlet': u'BMC Biotechnology',
+                 u'title': u'PhiC31 recombination system demonstrates heritable germinal transmission of site-specific excision from the Arabidopsis genome',
+                 u'uuid': u'2c18e9f0-ba04-11df-ae07-0024e8453de6',
+                 u'year': 2010}
+
+        response :=  [article, article article]
+        """
+        res = []
+        for article in response['documents']:
+            a = Article.lookup(title=article["title"], year=article["year"])
+            if not a:
+                a = Article()
+
+                for author in article['authors']:
+                    a["authors"].append("%s %s" % (author['forename'], author['surname']))
+
+            a["doi"] = article['doi']
+            a['source_urls'].append(article['mendeley_url'])
+            a['title'] = article['title']
+            a['year'] = article['year']
+            res.append(a)
+
+        return res
+
+
+    @classmethod
+    def search(cls, text=None, title=None, author=None, year=None, items=10):
+        results = cls.client.search(text, items=items)
+        return cls._parse(results)
 
 
 class SSRN(Site):
@@ -94,27 +139,5 @@ class SSRN(Site):
         pass
 
     @classmethod
-    def search(cls, text=None, title=None, author=None, year=None):
-        pass
-
-class IEEE(Site):
-
-    @classmethod
-    def _scrape(cls, soup, article):
-        ##TODO
-        pass
-
-    @classmethod
-    def search(cls, text=None, title=None, author=None, year=None):
-        pass
-
-class ACM(Site):
-
-    @classmethod
-    def _scrape(cls, soup, article):
-        ##TODO
-        pass
-
-    @classmethod
-    def search(cls, text=None, title=None, author=None, year=None):
+    def search(cls, text=None, title=None, author=None, year=None, items=10):
         pass
