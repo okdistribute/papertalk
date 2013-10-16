@@ -14,13 +14,15 @@ class Article(object):
     def __init__(self):
         self.attrs = {'title':         None,
                       'authors':       [],
-                      'source_url':    None,
+                      'source_urls':   [],
+                      'direct_url':    None,
                       'num_citations': 0,
                       'url_citations': None,
                       'url_versions':  None,
                       'num_versions':  0,
                       'year':          None,
-                      'url':           None}
+                      'url':           None,
+                      'doi':           None}
 
 
     def __getitem__(self, key):
@@ -50,3 +52,11 @@ class Article(object):
 
     def as_json(self):
         return self.attrs
+
+    @classmethod
+    def lookup(cls, title=None, year=None):
+        """
+        lookup an article in our db
+        """
+        return mongo.db.articles.find_one({"title": title,
+                                           "year": year})
