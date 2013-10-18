@@ -17,7 +17,10 @@ $ npm install
 
 ## config
 
-Edit the config.py to match your mongo database (yeah, you'll need one for yourself. try using a free [mongolab sandbox](http://www.mongolab.com))
+Edit the config.py to match your mongo database 
+(yeah, you'll need one for yourself. try using a free [mongolab sandbox](http://www.mongolab.com))
+
+You'll also need to get some mendeley API keys, but those are [free too](http://apidocs.mendeley.com).
 ```
 $ cp config_sample.py config.py
 ```
