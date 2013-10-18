@@ -9,3 +9,5 @@ class Config(object):
     MONGO_DBNAME = ''
     MONGO_USERNAME = ''
     MONGO_PASSWORD = ''
+    MENDELEY_KEY =  ''
+    MENDELEY_SECRET = ''
