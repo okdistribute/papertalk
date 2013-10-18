@@ -1,0 +1,14 @@
+{
+  "name": "mendeley-oapi-example",
+  "homepage": "https://github.com/Mendeley/mendeley-oapi-example",
+  "_release": "master",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "47ef3c87f33b9b3e9ea3b332135a94589f600ec1"
+  },
+  "_source": "https://github.com/Mendeley/mendeley-oapi-example.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/Mendeley/mendeley-oapi-example.git",
+  "_direct": true
+}
