@@ -125,7 +125,7 @@ class OAuthClient(object):
 
         if response.status_code == 503:
             raise Exception('Service unavailable')
-        
+
         responseToken = response.text
         token = oauth.Token.from_string(responseToken)
         return token
@@ -284,23 +284,22 @@ class MendeleyTokensStore:
 
 class MendeleyClientConfig:
 
-    def __init__(self, filename='config.json'):
-        self.filename = filename
+    def __init__(self):
         self.load()
 
     def is_valid(self):
         if not hasattr(self,"api_key") or not hasattr(self, "api_secret"):
             return False
 
-        if self.api_key == "<change me>" or self.api_secret == "<change me>":
+        if not self.api_key or not self.api_secret:
             return False
 
         return True
 
     def load(self):
-        loaded = json.loads(open(self.filename,'r').read())
-        for key, value in loaded.items():
-            setattr(self, key, value.encode("ascii"))
+        from papertalk import papertalk
+        self.api_key = papertalk.config['MENDELEY_KEY']
+        self.api_secret = papertalk.config['MENDELEY_SECRET']
 
 class MendeleyClient(object):
 
@@ -377,11 +376,11 @@ class MendeleyClient(object):
         verifier = raw_input('Enter verification code: ')
         self.set_access_token(self.verify_auth(request_token, verifier))
 
-def create_client(config_file="config.json", keys_file=None, account_name="test_account"):
+def create_client(keys_file=None, account_name="test_account"):
     # Load the configuration file
-    config = MendeleyClientConfig(config_file)
+    config = MendeleyClientConfig()
     if not config.is_valid():
-        print "Please edit config.json before running this script"
+        print "Please set mendeley api keys before running this script"
         sys.exit(1)
 
     # create a client and load tokens from the pkl file
