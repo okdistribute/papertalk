@@ -85,7 +85,7 @@ class Mendeley(Site):
         pass
 
     @classmethod
-    def _parse(cls, response):
+    def _parse(cls, documents):
         """
         returns a list of articles after parsing the response
         article := {u'authors': [{u'forename': u'James G',
@@ -108,7 +108,7 @@ class Mendeley(Site):
         response :=  [article, article article]
         """
         res = []
-        for article in response['documents']:
+        for article in documents:
             a = Article.lookup(title=article["title"], year=article["year"])
             if not a:
                 a = Article()
@@ -126,9 +126,12 @@ class Mendeley(Site):
 
 
     @classmethod
-    def search(cls, text=None, title=None, author=None, year=None, items=10):
+    def search(cls, text=None, title=None, author=None, year=None, items=15):
         results = cls.client.search(text, items=items)
-        return cls._parse(results)
+        docs = results["documents"]
+        if docs and "Getting Started with Mendeley" in docs[0]["title"]:
+            docs = docs[1:]
+        return cls._parse(docs)
 
 
 class SSRN(Site):
