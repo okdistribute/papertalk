@@ -26,6 +26,7 @@ class TestArticle(unittest.TestCase):
         with papertalk.app_context():
             articles = Mendeley.search(text)
             self.assertGreater(len(articles), 0)
+
             article = articles[0]
             self.assertEqual(article["title"], "Visualizing Communication on Social Media: Making Big Data Accessible")
             self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
