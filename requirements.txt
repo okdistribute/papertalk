@@ -5,3 +5,5 @@ Flask-PyMongo
 gunicorn==0.17.2
 BeautifulSoup
 pymongo
+oauth
+requests
