@@ -7,8 +7,8 @@ papertalk = Flask(__name__)
 try:
     papertalk.config.from_object('config.Config')
 except:
-    config_params = papertalk.config.from_object('config_sample.Config')
-    for key, value in config_params.iteritems():
+    papertalk.config.from_object('config_sample.Config')
+    for key, value in papertalk.config.iteritems():
         papertalk.config[key] = os.environ.get(key)
 
 mongo = PyMongo(papertalk)
