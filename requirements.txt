@@ -7,3 +7,4 @@ BeautifulSoup
 pymongo
 oauth
 requests
+httplib2
