@@ -87,7 +87,10 @@ class Mendeley(Site):
     @classmethod
     def _parse(cls, documents):
         """
-        returns a list of articles after parsing the response
+        returns a list of papertalk articles by parsing the documents, converting them from
+        mendeley format to papertalk format
+
+        documents :=  [article, article article]
         article := {u'authors': [{u'forename': u'James G',
                        u'surname': u'Thomson'},
                       {u'forename': u'Ronald',
@@ -104,9 +107,8 @@ class Mendeley(Site):
                  u'title': u'PhiC31 recombination system demonstrates heritable germinal transmission of site-specific excision from the Arabidopsis genome',
                  u'uuid': u'2c18e9f0-ba04-11df-ae07-0024e8453de6',
                  u'year': 2010}
-
-        response :=  [article, article article]
         """
+
         res = []
         for article in documents:
             a = Article.lookup(title=article["title"], year=article["year"])
@@ -120,6 +122,7 @@ class Mendeley(Site):
             a['source_urls'].append(article['mendeley_url'])
             a['title'] = article['title']
             a['year'] = article['year']
+            a['outlet'] = article['publication_outlet']
             res.append(a)
 
         return res
