@@ -2,6 +2,7 @@
 
 {% block content %}
 <span class="reaction-title">{{reaction.title}}</span>
+(for <a href="{{article.link()}}"><span>{{article.title}}</span></a>)
 	<div id="wmd-button-bar" style="display:none"></div>
 	<textarea id="wmd-input" class="form-control" style="display: none;">
 {{reaction.body}}

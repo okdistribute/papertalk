@@ -9,7 +9,6 @@ def article(aid):
     context = {}
     article = Article(aid)
     context["article"] = article
-    print article.reactions[0]['title']
 
     return render_template('article.html', **context)
 
