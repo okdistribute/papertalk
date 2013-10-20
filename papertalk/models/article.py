@@ -11,7 +11,7 @@ class Article(object):
     url (str)
     """
 
-    def __init__(self):
+    def __init__(self, article_id=None):
         self.attrs = {'title':         None,
                       'authors':       [],
                       'source_urls':   [],
@@ -23,6 +23,10 @@ class Article(object):
                       'year':          None,
                       'url':           None,
                       'doi':           None}
+        self.reactions = []
+
+        if article_id:
+            self.load(article_id)
 
 
     def __getitem__(self, key):
@@ -33,6 +37,9 @@ class Article(object):
 
     def __delitem__(self, key):
         del self.attrs[key]
+
+    def load(self, article_id):
+        self.attrs = mongo.db.articles.find_one(article_id)
 
     def save(self):
         article = mongo.db.articles.find_one({"title" : self["title"],

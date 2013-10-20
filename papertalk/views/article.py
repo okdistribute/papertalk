@@ -2,11 +2,15 @@ from flask import render_template, request
 from papertalk import papertalk, mongo
 from papertalk.utils.utils import jsonify
 from papertalk.models.sites import Scholar
+from papertalk.models.article import Article
 
-@papertalk.route('/article/<int:id>')
-def article(id):
+@papertalk.route('/article/<ObjectId:aid>')
+def article(aid):
     context = {}
-    context["article"] = mongo.db.find_one({"_id" : id})
+    article = Article()
+    article.load(aid)
+    context["article"] = article
+
     return render_template('article.html', **context)
 
 @papertalk.route("/article/search")
