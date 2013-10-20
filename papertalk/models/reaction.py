@@ -26,6 +26,7 @@ class Reaction(object):
     def __delitem__(self, key):
         del self.attrs[key]
 
+    ## TODO should this be persisted in mongo?
     def link(self):
         return '/reaction/'+str(self.attrs['_id'])
 

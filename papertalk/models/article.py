@@ -39,6 +39,7 @@ class Article(object):
     def __delitem__(self, key):
         del self.attrs[key]
 
+    ## TODO should this be persisted in mongo?
     def link(self):
         return '/article/'+str(self.attrs['_id'])
 
