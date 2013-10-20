@@ -1,6 +1,6 @@
 from papertalk import mongo
 
-class Article(object):
+class Article(dict):
     """
     An article in papertalk.
     Title (str)
@@ -12,27 +12,20 @@ class Article(object):
     """
 
     def __init__(self):
-        self.attrs = {'title':         None,
-                      'authors':       [],
-                      'source_urls':   [],
-                      'direct_url':    None,
-                      'num_citations': 0,
-                      'url_citations': None,
-                      'url_versions':  None,
-                      'num_versions':  0,
-                      'year':          None,
-                      'url':           None,
-                      'doi':           None}
-
-
-    def __getitem__(self, key):
-        return self.attrs[key]
-
-    def __setitem__(self, key, item):
-        self.attrs[key] = item
-
-    def __delitem__(self, key):
-        del self.attrs[key]
+        attrs = {'title':        None,
+                'authors':       [],
+                'source_urls':   [],
+                'direct_url':    None,
+                'num_citations': 0,
+                'url_citations': None,
+                'url_versions':  None,
+                'num_versions':  0,
+                'outlet':        None,
+                'year':          None,
+                'url':           None,
+                'doi':           None}
+        for key, value in attrs.iteritems():
+            self[key] = value
 
     def save(self):
         article = mongo.db.articles.find_one({"title" : self["title"],
@@ -49,9 +42,6 @@ class Article(object):
     def as_txt(self):
         # Get items sorted in specified order:
         return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.attrs.iteritems()])
-
-    def as_json(self):
-        return self.attrs
 
     @classmethod
     def lookup(cls, title=None, year=None):

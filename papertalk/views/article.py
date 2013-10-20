@@ -9,20 +9,20 @@ def article(id):
     context["article"] = mongo.db.find_one({"_id" : id})
     return render_template('article.html', **context)
 
-@papertalk.route("/article/search")
+
+@papertalk.route("/article/search", methods=["POST"])
 def article_search():
     """
     Parses the article from a given search string.
     This could be a title (most likely); or an author
     """
-    text = request.args.get("query", "")
+    text = request.form.get("query", "")
     print text
 
-    ##TODO right now, it always assumes google scholar. need to cycle through sites
     articles = Scholar.search(text=text)
-    print articles
+    articles += Mendeley.search(text=text)
 
-    return jsonify({"articles" : [a.as_json() for a in articles]})
+    return jsonify({"articles" : articles})
 
 
 @papertalk.route('/article/url', methods=["POST"])
@@ -36,9 +36,11 @@ def add_article():
     print site
     print url
 
-    ##TODO right now, it always assumes google scholar. need to check which site it is and load appropriately
-    article = Scholar.scrape(url)
+    article = {
+        "scholar" : Scholar.scrape(url),
+        "mendeley" : Mendeley.scrape(url)
+    }[site]
 
-    return jsonify(article.attrs)
+    return jsonify(article)
 
 
