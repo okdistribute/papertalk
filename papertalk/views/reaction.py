@@ -3,10 +3,11 @@ from papertalk import papertalk, mongo
 from papertalk.utils.utils import jsonify
 from papertalk.models.reaction import Reaction
 
-@papertalk.route('/reaction/<int:id>')
+@papertalk.route('/reaction/<ObjectId:id>')
 def reaction(id):
     context = {}
-    context["reaction"] = mongo.db.reactions.find_one({"_id" : id})
+    reaction = Reaction(id)
+    context["reaction"] = reaction
     return render_template('reaction.html', **context)
 
 @papertalk.route('/reaction/new', methods=["GET", "POST"])
