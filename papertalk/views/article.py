@@ -7,9 +7,9 @@ from papertalk.models.article import Article
 @papertalk.route('/article/<ObjectId:aid>')
 def article(aid):
     context = {}
-    article = Article()
-    article.load(aid)
+    article = Article(aid)
     context["article"] = article
+    print article.reactions[0]['title']
 
     return render_template('article.html', **context)
 

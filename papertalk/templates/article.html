@@ -13,7 +13,7 @@
 <h2>Reactions</h2>
 <ul>
 	{% for reaction in article.reactions %}
-		<li>{{reaction.title}}</li>
+		<li><a href="{{reaction.link()}}"><span class="reaction-title">{{reaction.title}}</span></a></li>
 	{% endfor %}
 </ul>
 <!-- <div class="moot" 
