@@ -1,7 +1,7 @@
 from flask import render_template, request
 from papertalk import papertalk, mongo
 from papertalk.utils.utils import jsonify
-from papertalk.models.sites import Scholar
+from papertalk.models.sites import Scholar, Mendeley
 
 @papertalk.route('/article/<int:id>')
 def article(id):

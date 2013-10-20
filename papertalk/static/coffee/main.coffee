@@ -11,35 +11,36 @@ check_url = (url) ->
         if re.test(url)
             console.log(site["name"], url)
             $("#" + site["name"]).removeClass("faded")
-            return site
+            window.site = site["name"]
         else
             $("#" + site["name"]).addClass("faded")
 
-        return null
+
+
 
 $("#articleInput").keyup () ->
     text = $(this).val()
     site = check_url(text)
 
 $("#articleGo").click () ->
-    text = $("#articleInput").val()
-    site = check_url(text)
+    query = $("#articleInput").val()
+
     if site
         $.ajax "/article/url",
             type: "POST"
             data:
-                site: site,
-                url: text
+                site: window.site,
+                url: query
             error: () ->
-                alert("failed to grab article")
+                alert("failed to grab article with /article/url")
             success: (data) ->
                 console.log(data)
     else
         $.ajax "/article/search",
-            type: "GET"
+            type: "POST"
             data:
-                query: text
+                query: query
             error: () ->
-                alert("failed to grab article")
+                alert("failed to grab article with /article/search")
             success: (data) ->
                 console.log(data)
