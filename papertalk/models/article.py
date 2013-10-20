@@ -1,4 +1,5 @@
 from papertalk import mongo
+from papertalk.models.reaction import Reaction
 
 class Article(object):
     """
@@ -11,7 +12,7 @@ class Article(object):
     url (str)
     """
 
-    def __init__(self):
+    def __init__(self, article_id=None):
         self.attrs = {'title':         None,
                       'authors':       [],
                       'source_urls':   [],
@@ -23,6 +24,10 @@ class Article(object):
                       'year':          None,
                       'url':           None,
                       'doi':           None}
+        self.reactions = []
+
+        if article_id:
+            self.load(article_id)
 
 
     def __getitem__(self, key):
@@ -33,6 +38,16 @@ class Article(object):
 
     def __delitem__(self, key):
         del self.attrs[key]
+
+    ## TODO should this be persisted in mongo?
+    def link(self):
+        return '/article/'+str(self.attrs['_id'])
+
+    def load(self, article_id):
+        self.attrs = mongo.db.articles.find_one(article_id)
+
+        self.reactions = [Reaction(r['_id']) 
+          for r in mongo.db.reactions.find({'article_id': article_id}, {'_id': True})]
 
     def save(self):
         article = mongo.db.articles.find_one({"title" : self["title"],

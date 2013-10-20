@@ -1,14 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="{{article.link}}">{{article.title}}</a>
+<span class="article-title"><a href="{{article.url}}">{{article.title}}</a></span>
+<div class="authors">
+	{% for a in article.authors %} 
+		<span class="author">{{a}}</span>
+		{% if not loop.last %}, {% endif %}
+	{% endfor %}
+	<span class="year">{{article.year}}</span>
+</div>
 
-<div class="moot" 
+<h2>Reactions</h2>
+<ul>
+	{% for reaction in article.reactions %}
+		<li><a href="{{reaction.link()}}"><span class="reaction-title">{{reaction.title}}</span></a></li>
+	{% endfor %}
+</ul>
+<!-- <div class="moot" 
      id="article-moot"
      href="https://moot.it/i/labmeeting/articles/{{article.id}}">
      {{article.title}}
  </div>
-
+ -->
 <script src="{{url_for('static', filename='js/article.js')}}"></script>
 {% endblock %}
 
