@@ -16,8 +16,6 @@ check_url = (url) ->
             $("#" + site["name"]).addClass("faded")
 
 
-
-
 $("#articleInput").keyup () ->
     text = $(this).val()
     site = check_url(text)

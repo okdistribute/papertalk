@@ -3,10 +3,12 @@ from papertalk import papertalk, mongo
 from papertalk.utils.utils import jsonify
 from papertalk.models.sites import Scholar, Mendeley
 
-@papertalk.route('/article/<int:id>')
-def article(id):
+@papertalk.route('/article/<ObjectId:aid>')
+def article(aid):
     context = {}
-    context["article"] = mongo.db.find_one({"_id" : id})
+    article = mongo.db.articles.find_one_or_404({'_id': aid})
+    context["article"] = article
+
     return render_template('article.html', **context)
 
 
@@ -23,7 +25,6 @@ def article_search():
     articles += Mendeley.search(text=text)
 
     return jsonify({"articles" : articles})
-
 
 @papertalk.route('/article/url', methods=["POST"])
 def add_article():
@@ -42,5 +43,6 @@ def add_article():
     }[site]
 
     return jsonify(article)
+
 
 

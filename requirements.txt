@@ -8,3 +8,4 @@ pymongo
 oauth
 requests
 httplib2
+Flask-Testing

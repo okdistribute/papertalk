@@ -396,6 +396,7 @@ def create_client(keys_file=None, account_name="test_account"):
 
     # configure the client to use a specific token
     # if no tokens are available, prompt the user to authenticate
+
     #access_token = tokens_store.get_access_token(account_name)
     #if not access_token:
     #    try:
@@ -406,4 +407,5 @@ def create_client(keys_file=None, account_name="test_account"):
     #         sys.exit(1)
     #else:
     #   client.set_access_token(access_token)
+
     return client

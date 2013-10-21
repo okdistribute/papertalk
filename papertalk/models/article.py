@@ -1,4 +1,5 @@
 from papertalk import mongo
+from papertalk.models.reaction import Reaction
 
 class Article(dict):
     """
@@ -11,10 +12,13 @@ class Article(dict):
     url (str)
     """
 
+
     def __init__(self):
-        attrs = {'title':        None,
+        attrs = {'_id': None,
+                 'title':        None,
                 'authors':       [],
                 'source_urls':   [],
+                'reactions':     [],
                 'direct_url':    None,
                 'num_citations': 0,
                 'url_citations': None,
@@ -24,24 +28,25 @@ class Article(dict):
                 'year':          None,
                 'url':           None,
                 'doi':           None}
+
         for key, value in attrs.iteritems():
             self[key] = value
 
     def save(self):
         article = mongo.db.articles.find_one({"title" : self["title"],
-                                              "year" : self["year"]})
+                                              "year"  : self["year"]})
         if article:
             print "article exists"
-            article_id = article["_id"]
+            mongo.db.articles.save(article)
         else:
             print "creating new article"
-            article_id = mongo.db.articles.insert(self.attrs)
+            self["_id"] = mongo.db.articles.insert(self)
 
-        return article_id
+        return self["_id"]
 
     def as_txt(self):
         # Get items sorted in specified order:
-        return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.attrs.iteritems()])
+        return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.iteritems()])
 
     @classmethod
     def lookup(cls, title=None, year=None):

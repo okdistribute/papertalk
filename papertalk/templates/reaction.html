@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<span class="reaction-title">{{reaction.title}}</span>
+(for <a href="{{article.link()}}"><span>{{article.title}}</span></a>)
+	<div id="wmd-button-bar" style="display:none"></div>
+	<textarea id="wmd-input" class="form-control" style="display: none;">
+{{reaction.body}}
+</textarea>
+	<div id="wmd-preview" class="col-lg-12"></div>
+
+<script src="{{url_for('static', filename='vendor/pagedown/Markdown.Converter.js')}}"></script>
+<script src="{{url_for('static', filename='vendor/pagedown/Markdown.Editor.js')}}"></script>
+<script src="{{url_for('static', filename='js/reaction.js')}}"></script>
+{% endblock %}
+

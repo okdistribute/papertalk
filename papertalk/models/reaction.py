@@ -9,10 +9,11 @@ class Reaction(object):
     """
 
     def __init__(self):
-        self.attrs = {'_id':            None,
-                      'title':         None,
-                      'body':          None,
-                      'user':          None}
+        self.attrs = ({'_id':   None,
+                      'title': None,
+                      'body':  None,
+                      'user':  None,
+                      'article_id': None})
 
     def __getitem__(self, key):
         return self.attrs[key]
@@ -23,9 +24,8 @@ class Reaction(object):
     def __delitem__(self, key):
         del self.attrs[key]
 
-    def _create(self):
-        self.attrs["_id"] = mongo.db.reactions.insert(self.attrs)
-        return self.attrs["_id"]
+    def load(self, reaction_id):
+        self.attrs = mongo.db.reactions.find_one(reaction_id)
 
     def save(self):
         """
@@ -42,12 +42,11 @@ class Reaction(object):
                 raise Exception("weird. this reaction must have been deleted before an update.")
         else:
             print "creating new reaction"
-            self._create()
+            self.attrs["_id"] = mongo.db.reactions.insert(self.attrs)
 
         return self.attrs["_id"]
 
     def as_txt(self):
-        # Get items sorted in specified order:
         return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.attrs.iteritems()])
 
     def as_json(self):
