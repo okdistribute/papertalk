@@ -1,3 +1,5 @@
+import urllib
+
 class Config(object):
     """
     Config for papertalk. Rename to config.py before running server
