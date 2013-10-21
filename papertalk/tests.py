@@ -1,14 +1,14 @@
 __author__ = 'karissamckelvey'
 import unittest
-from papertalk import make_app
+from server import make_app
 from papertalk.models.sites import Scholar, Mendeley
 from flask.ext.testing import TestCase
-from flask.ext.pymongo import PyMongo
+from flask import current_app
 
 class TestArticle(TestCase):
 
     def create_app(self):
-        app, self.mongo = make_app()
+        app = make_app()
         app.config['TESTING'] = True
         return app
 
@@ -43,7 +43,7 @@ class TestArticle(TestCase):
         article = Scholar.scrape(url)
         article.save()
 
-        article = self.mongo.db.articles.find_one({"title" : article['title']})
+        article = current_app.mongo.db.articles.find_one({"title" : article['title']})
         self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
 
 
@@ -52,15 +52,15 @@ class TestArticle(TestCase):
         View the article
         """
         title = "Visualizing Communication on Social Media: Making Big Data Accessible"
-        article = self.mongo.db.articles.find_one({"title" : title})
+        article = current_app.mongo.db.articles.find_one({"title" : title})
 
         assert article
-        
-        #res = self.client.get(url)
-        #self.assert200(res)
 
-        #res = self.client.get("/article/{0}".format("notaproperid"))
-        #self.assert404(res)
+        res = self.client.get("/article/{0}".format(article["_id"]))
+        self.assert200(res)
+
+        res = self.client.get("/article/{0}".format("notaproperid"))
+        self.assert400(res)
 
 if __name__ == '__main__':
     unittest.main()

@@ -11,3 +11,6 @@ class Config(object):
     MONGO_PASSWORD = ''
     MENDELEY_KEY =  ''
     MENDELEY_SECRET = ''
+
+    MONGO_URL = "mongodb://%s:%s@%s:%s/%s" % (MONGO_USERNAME, urllib.quote(MONGO_PASSWORD), MONGO_HOST, MONGO_PORT, MONGO_DBNAME)
+

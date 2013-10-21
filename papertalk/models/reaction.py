@@ -1,4 +1,4 @@
-from papertalk import mongo
+from flask import current_app
 
 class Reaction(object):
     """
@@ -25,24 +25,25 @@ class Reaction(object):
         del self.attrs[key]
 
     def load(self, reaction_id):
-        self.attrs = mongo.db.reactions.find_one(reaction_id)
+        self.attrs = current_app.mongo.db.reactions.find_one(reaction_id)
 
     def save(self):
         """
         Called to save or update the reaction.
         """
+        db = current_app.mongo.db
         if self.attrs['_id']:
-            reaction = mongo.db.reactions.find_one({"_id" : self["_id"]})
+            reaction = db.reactions.find_one({"_id" : self["_id"]})
 
             if reaction:
                 print "updating reaction"
                 print self.as_txt()
-                mongo.db.reactions.save(self.attrs)
+                db.reactions.save(self.attrs)
             else:
                 raise Exception("weird. this reaction must have been deleted before an update.")
         else:
             print "creating new reaction"
-            self.attrs["_id"] = mongo.db.reactions.insert(self.attrs)
+            self.attrs["_id"] = db.reactions.insert(self.attrs)
 
         return self.attrs["_id"]
 

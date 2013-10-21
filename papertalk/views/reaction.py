@@ -1,19 +1,20 @@
-from flask import render_template, request
-from papertalk import papertalk, mongo
+from flask import render_template, request, Blueprint, current_app
 from papertalk.utils.utils import jsonify
 from papertalk.models.reaction import Reaction
-from papertalk.models.article import Article
 
-@papertalk.route('/reaction/<ObjectId:id>')
+reaction_blueprint  = Blueprint("reaction", __name__)
+
+@reaction_blueprint.route('/reaction/<ObjectId:id>')
 def reaction(id):
     context = {}
-    reaction = mongo.db.reactions.find_one_or_404({"_id" : id})
-    article = mongo.db.articles.find_one_or_404({"_id" : reaction['article_id']})
+    db = current_app.mongo.db
+    reaction = db.reactions.find_one_or_404({"_id" : id})
+    article = db.articles.find_one_or_404({"_id" : reaction['article_id']})
     context["reaction"] = reaction
     context["article"] = article
     return render_template('reaction.html', **context)
 
-@papertalk.route('/reaction/new', methods=["GET", "POST"])
+@reaction_blueprint.route('/reaction/new', methods=["GET", "POST"])
 def reaction_author():
     if request.method == "GET":
         context = {}

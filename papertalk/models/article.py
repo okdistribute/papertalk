@@ -1,5 +1,4 @@
-from papertalk import mongo
-from papertalk.models.reaction import Reaction
+from flask import current_app
 
 class Article(dict):
     """
@@ -33,14 +32,14 @@ class Article(dict):
             self[key] = value
 
     def save(self):
-        article = mongo.db.articles.find_one({"title" : self["title"],
-                                              "year"  : self["year"]})
+        db = current_app.mongo.db
+        article = db.articles.find_one({"title" : self["title"], "year"  : self["year"]})
         if article:
             print "article exists"
-            mongo.db.articles.save(article)
+            db.articles.save(article)
         else:
             print "creating new article"
-            self["_id"] = mongo.db.articles.insert(self)
+            self["_id"] = db.articles.insert(self)
 
         return self["_id"]
 
@@ -49,9 +48,8 @@ class Article(dict):
         return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.iteritems()])
 
     @classmethod
-    def lookup(cls, title=None, year=None):
+    def lookup(cls, query):
         """
         lookup an article in our db
         """
-        return mongo.db.articles.find_one({"title": title,
-                                           "year": year})
+        return current_app.mongo.db.articles.find_one_or_404(query)
