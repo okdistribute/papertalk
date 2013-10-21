@@ -297,9 +297,9 @@ class MendeleyClientConfig:
         return True
 
     def load(self):
-        from papertalk import papertalk
-        self.api_key = papertalk.config['MENDELEY_KEY']
-        self.api_secret = papertalk.config['MENDELEY_SECRET']
+        from flask import current_app
+        self.api_key = current_app.config['MENDELEY_KEY']
+        self.api_secret = current_app.config['MENDELEY_SECRET']
 
 class MendeleyClient(object):
 

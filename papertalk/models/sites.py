@@ -77,8 +77,6 @@ class Scholar(Site):
 
 class Mendeley(Site):
 
-    client = mc.create_client()
-
     @classmethod
     def _parse(cls, documents):
         """
@@ -104,10 +102,10 @@ class Mendeley(Site):
         """
         res = []
         for article in documents:
-            a = Article.lookup(title=article["title"], year=article["year"])
-            if not a:
+            try:
+                a = Article.lookup({"title": article["title"], "year": article["year"]})
+            except:
                 a = Article()
-
                 for author in article['authors']:
                     a["authors"].append("%s %s" % (author['forename'], author['surname']))
 
@@ -122,7 +120,8 @@ class Mendeley(Site):
 
     @classmethod
     def search(cls, text=None, title=None, author=None, year=None, items=15):
-        results = cls.client.search(text, items=items)
+        client = mc.create_client()
+        results = client.search(text, items=items)
         docs = results["documents"]
         if docs and "Getting Started with Mendeley" in docs[0]["title"]:
             docs = docs[1:]
