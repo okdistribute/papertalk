@@ -1,1 +1,1 @@
-web: gunicorn papertalk.server:make_app
+web: gunicorn papertalk.wsgi:app
