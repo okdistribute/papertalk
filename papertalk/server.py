@@ -16,8 +16,8 @@ def make_app():
     try:
         app.config.from_object('config.Config')
     except:
-        config_params = app.config.from_object('config_sample.Config')
-        for key, value in config_params.iteritems():
+        app.config.from_object('config_sample.Config')
+        for key, value in app.config.iteritems():
             app.config[key] = os.environ.get(key)
     app.mongo = PyMongo(app)
 
