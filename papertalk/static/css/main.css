@@ -57,7 +57,7 @@ h1 {
     margin: 40px 0 20px;
 }
 
-.title {
+.header-title {
     padding-top: 170px;
     font-size: 80px;
 }
@@ -84,7 +84,7 @@ h1 {
         width: 75px;
     }
 
-    .title {
+    .header-title {
         font-size: 48px;
         padding-top:100px;
         padding-bottom:10px;

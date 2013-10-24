@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+   <h1>Results for "{{query}}"</h1>
+    <ul class="article-results list-group">
+   {% for article in articles %}
+       <li class="list-group-item">
+           <h2>
+            <a id="result_{{loop.index - 1}}"
+           {% if article['_id'] %}
+            href="/article/{{article['_id']}}">
+           {% else %}
+             class="unknown-article"
+             href="/article/create">
+           {% endif %}
+               <span class="authors">{{ article['author_display']|safe }} </span>
+               <span class="title">{{ article['title']|safe }}</span>
+               <span class="year">{{ article['year'] }}</span>
+
+           </h2>
+           <h3>
+           {{ article['reactions']|length }} Reactions</a>
+           |
+           <a class="citations" href="{{article['url_citations']}}" target="_blank">
+               {{ article['num_citations'] }} Citations
+           </a>
+           |
+           <a class="direct_url" href="{{article['url']}}" target="_blank">Direct URL</a>
+           </h3>
+       </li>
+    {% endfor %}
+
+    </ul>
+
+{% endblock %}
