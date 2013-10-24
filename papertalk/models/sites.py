@@ -64,15 +64,13 @@ class Scholar(Site):
         return article
 
     @classmethod
-    def search(cls, text=None, title=None, author=None, year=None, items=10):
+    def search(cls, text=None, title=None, author='', year=None, items=10):
         """
         Returns a list of article(s) that match this search query
         """
-        if not author:
-            author = ''
-
         scholarQuerier = scholar.ScholarQuerier(author)
         scholarQuerier.query(text)
+
         return scholarQuerier.articles
 
 class Mendeley(Site):
