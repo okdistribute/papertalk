@@ -1,5 +1,6 @@
 from flask import render_template, request, Blueprint
-from papertalk.utils.utils import jsonify
+from papertalk.utils import utils
+from papertalk.models.results import get_known_articles
 from papertalk.models.sites import Scholar, Mendeley
 from papertalk.models.article import Article
 
@@ -15,21 +16,24 @@ def article(id):
     return render_template('article.html', **context)
 
 
-@article_blueprint.route("/article/search", methods=["POST"])
+@article_blueprint.route("/article/search", methods=["GET"])
 def article_search():
     """
     Parses the article from a given search string.
     This could be a title (most likely); or an author
     """
-    text = request.form.get("query", "")
+    text = request.args.get("query")
     print text
 
-    articles = Scholar.search(text=text)
-    articles += Mendeley.search(text=text)
+    articles = Scholar.search(text)
+    #articles += Mendeley.search(text)
 
-    return jsonify({"articles" : articles})
+    articles = get_known_articles(articles)
+    return render_template("results.html",
+                           query=text,
+                           articles=articles)
 
-@article_blueprint.route('/article/url', methods=["POST"])
+@article_blueprint.route('/article/url', methods=["GET"])
 def add_article():
     """
     Scrapes the url and returns a new article
@@ -45,7 +49,7 @@ def add_article():
         "mendeley" : Mendeley.scrape(url)
     }[site]
 
-    return jsonify(article)
+    return utils.jsonify(article)
 
 
 

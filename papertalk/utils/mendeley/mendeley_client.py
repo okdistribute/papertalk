@@ -388,23 +388,6 @@ def create_client(keys_file=None, account_name="test_account"):
     if hasattr(config, "host"):
         host = config.host
 
-    if not keys_file:
-        keys_file = "keys_%s.pkl"%host
-
     client = MendeleyClient(config.api_key, config.api_secret, {"host":host})
-    tokens_store = MendeleyTokensStore(keys_file)
-
-    # configure the client to use a specific token
-    # if no tokens are available, prompt the user to authenticate
-    #access_token = tokens_store.get_access_token(account_name)
-    #if not access_token:
-    #    try:
-    #        client.interactive_auth()
-    #        tokens_store.add_account(account_name,client.get_access_token())
-    #    except Exception as e:
-    #         print e
-    #         sys.exit(1)
-    #else:
-    #   client.set_access_token(access_token)
 
     return client

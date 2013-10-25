@@ -53,3 +53,9 @@ class Article(dict):
         lookup an article in our db
         """
         return current_app.mongo.db.articles.find_one_or_404(query)
+
+    def disambiguate(self, other):
+        """
+        returns a new article with the two articles merged
+        """
+        pass
