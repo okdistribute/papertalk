@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint
 from papertalk.utils import utils
-from papertalk.models.results import get_known_articles
+from papertalk.models.results import get_or_insert_articles
 from papertalk.models.sites import Scholar, Mendeley
 from papertalk.models.article import Article
 
@@ -28,7 +28,7 @@ def article_search():
     articles = Scholar.search(text)
     #articles += Mendeley.search(text)
 
-    articles = get_known_articles(articles)
+    articles = get_or_insert_articles(articles)
     return render_template("results.html",
                            query=text,
                            articles=articles)
@@ -50,6 +50,11 @@ def add_article():
     }[site]
 
     return utils.jsonify(article)
+
+@article_blueprint.route('/article/create', methods=["POST"])
+def create_article():
+    pass
+
 
 
 

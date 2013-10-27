@@ -39,6 +39,7 @@ class Article(dict):
             db.articles.save(article)
         else:
             print "creating new article"
+            del self["_id"]
             self["_id"] = db.articles.insert(self)
 
         return self["_id"]

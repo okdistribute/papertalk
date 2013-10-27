@@ -8,9 +8,25 @@ def get_known_articles(articles):
     res = []
     for article in articles:
         try:
-            a = Article.lookup({"title" : article["title"]})
+            a = Article.lookup({"title" : article["title"], "year": article["year"]})
         except:
             a = article
 
         res.append(a)
     return res
+
+def get_or_insert_articles(articles):
+    res = []
+    for article in articles:
+        try:
+            a = Article.lookup({"title" : article["title"], "year": article["year"]})
+
+        except:
+            a = Article()
+            a.update(article)
+            a.save()
+
+        res.append(a)
+
+    return res
+
