@@ -1,6 +1,6 @@
 from flask import current_app
 
-class Reaction(object):
+class Reaction(dict):
     """
     A reaction in papertalk.
     Title (str)
@@ -9,23 +9,14 @@ class Reaction(object):
     """
 
     def __init__(self):
-        self.attrs = ({'_id':   None,
+        attrs = ({'_id':   None,
                       'title': None,
                       'body':  None,
                       'user':  None,
                       'article_id': None})
 
-    def __getitem__(self, key):
-        return self.attrs[key]
-
-    def __setitem__(self, key, item):
-        self.attrs[key] = item
-
-    def __delitem__(self, key):
-        del self.attrs[key]
-
-    def load(self, reaction_id):
-        self.attrs = current_app.mongo.db.reactions.find_one(reaction_id)
+        for key, value in attrs.iteritems():
+            self[key] = value        
 
     def save(self):
         """
@@ -46,6 +37,21 @@ class Reaction(object):
             self.attrs["_id"] = db.reactions.insert(self.attrs)
 
         return self.attrs["_id"]
+
+    @classmethod
+    def lookup(cls, query):
+        """
+        lookup a reaction in our db
+        """
+        return current_app.mongo.db.reactions.find_one_or_404(query)
+
+    @classmethod
+    def for_article(cls, article_id):
+        """
+        lookup reactions for an article
+        """
+        res = current_app.mongo.db.reactions.find({"article_id": article_id})
+        return [Reaction().update(r) for r in res]
 
     def as_txt(self):
         return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.attrs.iteritems()])
