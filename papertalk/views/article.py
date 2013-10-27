@@ -3,6 +3,7 @@ from papertalk.utils import utils
 from papertalk.models.results import get_or_insert_articles
 from papertalk.models.sites import Scholar, Mendeley
 from papertalk.models.article import Article
+from papertalk.models.reaction import Reaction
 
 
 article_blueprint = Blueprint("article", __name__)
@@ -11,7 +12,9 @@ article_blueprint = Blueprint("article", __name__)
 def article(id):
     context = {}
     article = Article.lookup({'_id': id})
+    reactions = Reaction.for_article({'article_id': id})
     context["article"] = article
+    context["reactions"] = reactions
 
     return render_template('article.html', **context)
 
