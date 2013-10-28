@@ -105,19 +105,12 @@ class Mendeley(Site):
         response :=  [article, article article]
         """
         res = []
-        for article in documents:
-            try:
-                a = Article.lookup({"title": article["title"], "year": article["year"]})
-            except:
-                a = Article()
-                for author in article['authors']:
-                    a["authors"].append("%s %s" % (author['forename'], author['surname']))
-
-            a["doi"] = article['doi']
-            a['source_urls'].append(article['mendeley_url'])
-            a['title'] = article['title']
-            a['year'] = article['year']
-            a['canonical_title'] = utils.canonicalize(article['title'], article['year'])
+        for a in documents:
+            authors = a['authors']
+            a['authors'] = ["%s %s" % (author['forename'], author['surname']) for author in authors]
+            a['source_urls'] = [a['mendeley_url']]
+            a['source_id'] = a['uuid']
+            a['canonical_title'] = utils.canonicalize(a['title'], a['year'])
             a['search_source'] = 'mendeley'
             res.append(a)
 
