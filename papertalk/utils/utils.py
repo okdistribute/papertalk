@@ -33,3 +33,6 @@ def jsonify(*args, **kwargs):
     """ jsonify with support for MongoDB ObjectId
     """
     return Response(json.dumps(dict(*args, **kwargs), cls=MongoJsonEncoder), mimetype='application/json')
+
+def canonicalize(title, year):
+    return title.lower().strip() + '-' + year.lower().strip()

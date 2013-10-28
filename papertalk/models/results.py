@@ -15,7 +15,7 @@ def get_known_articles(articles):
         res.append(a)
     return res
 
-def get_or_insert_articles(articles):
+def get_or_insert_articles(search_results):
     res = []
     for article in articles:
         try:
