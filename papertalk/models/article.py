@@ -35,10 +35,8 @@ class Article(dict):
         db = current_app.mongo.db
         article = db.articles.find_one({"title" : self["title"], "year"  : self["year"]})
         if article:
-            print "article exists"
             db.articles.save(article)
         else:
-            print "creating new article"
             del self["_id"]
             self["_id"] = db.articles.insert(self)
 

@@ -28,8 +28,8 @@ def article_search():
     text = request.args.get("query")
     print text
 
-    search_results = Scholar.search(text)
-    #search_results += Mendeley.search(text)
+    search_results = Mendeley.search(text)
+    search_results += Scholar.search(text)
 
     articles = get_or_insert_articles(search_results)
     return render_template("results.html",
