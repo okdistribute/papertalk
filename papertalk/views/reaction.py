@@ -18,6 +18,7 @@ def reaction(id):
 def reaction_author():
     if request.method == "GET":
         context = {}
+        context['article_id'] = request.args.get('article')
         return render_template('reaction_author.html', **context)
 
     elif request.method == "POST":

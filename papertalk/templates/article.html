@@ -11,6 +11,8 @@
 </div>
 
 <h2>Reactions</h2>
+<a class="btn btn-primary btn-large" type="button" id="reactionNew" href="/reaction/new?article={{article._id}}">New Reaction</a>
+
 <ul>
 	{% for reaction in article.reactions %}
 		<li><a href="{{reaction.link()}}"><span class="reaction-title">{{reaction.title}}</span></a></li>
