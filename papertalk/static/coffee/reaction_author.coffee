@@ -5,11 +5,13 @@ editor.run()
 $("#reactionSave").click () ->
     title = $("#reaction-title").val()
     text = $("#wmd-input").val()
+    article_id = $("#article-id").text()
     $.ajax "/reaction/new",
         type: "POST"
         data:
             title: title,
-            text: text
+            text: text,
+            article_id: article_id
         error: () ->
             alert("failed to save article")
         success: (data) ->

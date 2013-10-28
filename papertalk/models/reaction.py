@@ -1,4 +1,5 @@
 from flask import current_app
+from bson.objectid import ObjectId
 
 class Reaction(dict):
     """
@@ -9,11 +10,10 @@ class Reaction(dict):
     """
 
     def __init__(self):
-        attrs = ({'_id':   None,
-                      'title': None,
-                      'body':  None,
-                      'user':  None,
-                      'article_id': None})
+        attrs = ({'title': None,
+                 'body':  None,
+                 'user':  None,
+                 'article_id': None})
 
         for key, value in attrs.iteritems():
             self[key] = value        
@@ -23,7 +23,7 @@ class Reaction(dict):
         Called to save or update the reaction.
         """
         db = current_app.mongo.db
-        if self.attrs['_id']:
+        if '_id' in self:
             reaction = db.reactions.find_one({"_id" : self["_id"]})
 
             if reaction:
@@ -34,9 +34,9 @@ class Reaction(dict):
                 raise Exception("weird. this reaction must have been deleted before an update.")
         else:
             print "creating new reaction"
-            self.attrs["_id"] = db.reactions.insert(self.attrs)
+            self["_id"] = db.reactions.insert(self)
 
-        return self.attrs["_id"]
+        return self["_id"]
 
     @classmethod
     def lookup(cls, query):
@@ -50,8 +50,17 @@ class Reaction(dict):
         """
         lookup reactions for an article
         """
-        res = current_app.mongo.db.reactions.find({"article_id": article_id})
-        return [Reaction().update(r) for r in res]
+        docs = current_app.mongo.db.reactions.find({"article_id": ObjectId(article_id)})
+        res = []
+        for d in docs:
+            reaction = Reaction()
+            reaction.update(d)
+            res.append(reaction)
+
+        return res
+
+    def link(self):
+        return '/reaction/'+str(self['_id'])
 
     def as_txt(self):
         return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.attrs.iteritems()])

@@ -12,7 +12,7 @@ article_blueprint = Blueprint("article", __name__)
 def article(id):
     context = {}
     article = Article.lookup({'_id': id})
-    reactions = Reaction.for_article({'article_id': id})
+    reactions = Reaction.for_article(id)
     context["article"] = article
     context["reactions"] = reactions
 
