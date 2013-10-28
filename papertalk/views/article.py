@@ -54,10 +54,6 @@ def add_article():
 
     return utils.jsonify(article)
 
-@article_blueprint.route('/article/create', methods=["POST"])
-def create_article():
-    pass
-
 
 
 
