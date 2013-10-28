@@ -17,13 +17,13 @@ def get_known_articles(articles):
 
 def get_or_insert_articles(search_results):
     res = []
-    for article in articles:
+    for sr in search_results:
         try:
-            a = Article.lookup({"title" : article["title"], "year": article["year"]})
+            a = Article.lookup({'canonical_title': sr['canonical_title']})
 
         except:
             a = Article()
-            a.update(article)
+            a.update(sr)
             a.save()
 
         res.append(a)
