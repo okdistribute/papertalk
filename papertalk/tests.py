@@ -22,7 +22,7 @@ class TestArticle(TestCase):
         self.assertEqual(article["title"], "Visualizing Communication on Social Media: Making Big Data Accessible")
         self.assertEqual(article["direct_url"], "http://arxiv.org/abs/1202.1367")
         self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
-        self.assertEqual(article["num_citations"], 6)
+        self.assertEqual(article["num_citations"], 7)
         self.assertEqual(article["year"], 2012)
 
 
