@@ -1,61 +1,65 @@
 from flask import current_app
+from papertalk.utils import utils
 
-class Article(dict):
+class Article(object):
     """
-    An article in papertalk.
-    Title (str)
-    Authors (list of str)
-    Year (dt)
-    Num citations (num)
-    Full Citation (text)
-    url (str)
+    {'_id': None,
+     'title':        '',
+    'authors':       [],
+    'source_urls':   [],
+    'reactions':     [],
+    'direct_url':    '',
+    'num_citations': 0,
+    'url_citations': '',
+    'url_versions':  '',
+    'num_versions':  0,
+    'outlet':        '',
+    'year':          None,
+    'url':           '',
+    'doi':           ''}
     """
-
-
-    def __init__(self):
-        attrs = {'_id': None,
-                 'title':        None,
-                'authors':       [],
-                'source_urls':   [],
-                'reactions':     [],
-                'direct_url':    None,
-                'num_citations': 0,
-                'url_citations': None,
-                'url_versions':  None,
-                'num_versions':  0,
-                'outlet':        None,
-                'year':          None,
-                'url':           None,
-                'doi':           None}
-
-        for key, value in attrs.iteritems():
-            self[key] = value
-
-    def save(self):
-        db = current_app.mongo.db
-        article = db.articles.find_one({"title" : self["title"], "year"  : self["year"]})
-        if article:
-            print "article exists"
-            db.articles.save(article)
-        else:
-            print "creating new article"
-            self["_id"] = db.articles.insert(self)
-
-        return self["_id"]
-
-    def as_txt(self):
-        # Get items sorted in specified order:
-        return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.iteritems()])
+    db = current_app.mongo.db
 
     @classmethod
-    def lookup(cls, query):
+    def update(cls, _id, *E, **doc):
         """
-        lookup an article in our db
+        called to update the reaction
         """
-        return current_app.mongo.db.articles.find_one_or_404(query)
+        doc.update(*E)
 
-    def disambiguate(self, other):
+
+        return cls.db.articles.update({"_id" : _id},
+                                      {"$set": doc},
+                                      safe=True)
+
+
+    @classmethod
+    def save(cls, title, body, user_id, **doc):
         """
-        returns a new article with the two articles merged
+        Called to save or update the reaction.
         """
-        pass
+        doc.update({"title": title,
+                    "body": body,
+                    "user": user_id})
+
+        _id = cls.db.articles.insert(doc, safe=True)
+        return _id
+
+    @classmethod
+    def lookup(cls, _id=None, title=None, year=None, mult=False):
+        """
+        lookup a reaction in our db
+        """
+        if title and year:
+            query = {"title": utils.canonicalize(title, year)}
+        elif title:
+            query = {"title": title}
+        elif year:
+            query = {"year": year}
+        else:
+            query = {"_id": _id}
+
+        if mult:
+            return cls.db.articles.find(query)
+        else:
+            return cls.db.articles.find_one(query)
