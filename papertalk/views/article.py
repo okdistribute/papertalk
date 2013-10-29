@@ -4,15 +4,16 @@ from papertalk.models.results import get_or_insert_articles
 from papertalk.models.sites import Scholar, Mendeley
 from papertalk.models.article import Article
 from papertalk.models.reaction import Reaction
+from bson.objectid import ObjectId
 
 
 article_blueprint = Blueprint("article", __name__)
 
-@article_blueprint.route('/article/<ObjectId:id>')
-def article(id):
+@article_blueprint.route('/article/<ObjectId:_id>')
+def article(_id):
     context = {}
-    article = Article.lookup({'_id': id})
-    reactions = Reaction.for_article(id)
+    article = Article.lookup({'_id': _id})
+    reactions = Reaction.lookup({"article_id": ObjectId(_id)}, mult=True)
     context["article"] = article
     context["reactions"] = reactions
 

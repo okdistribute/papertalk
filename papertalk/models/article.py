@@ -30,7 +30,7 @@ class Article(dict):
         self.update(attrs)
 
 
-    def save(self,):
+    def save(self):
         db = current_app.mongo.db
         query = {"title" : self["title"], "year": self["year"]}
         article = db.articles.find_one(query, as_class=dict)
