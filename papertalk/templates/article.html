@@ -15,7 +15,7 @@
 
 <ul>
 	{% for reaction in reactions %}
-		<li><a href="{{reaction.link()}}"><span class="reaction-title">{{reaction.title}}</span></a></li>
+		<li><a href="/reaction/{{reaction._id}}"><span class="reaction-title">{{reaction.title}}</span></a></li>
 	{% endfor %}
 </ul>
 <!-- <div class="moot" 
