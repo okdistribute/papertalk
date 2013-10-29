@@ -1,7 +1,7 @@
 __author__ = 'karissamckelvey'
 import unittest
 from server import make_app
-from papertalk.models.sites import Scholar, Mendeley
+from models.sites import Scholar, Mendeley
 from flask.ext.testing import TestCase
 from flask import current_app
 
