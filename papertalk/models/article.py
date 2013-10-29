@@ -27,9 +27,8 @@ class Article(dict):
                 'year':          None,
                 'url':           None,
                 'doi':           None}
+        self.update(attrs)
 
-        for key, value in attrs.iteritems():
-            self[key] = value
 
     def save(self):
         db = current_app.mongo.db
