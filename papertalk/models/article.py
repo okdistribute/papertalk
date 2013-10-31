@@ -27,32 +27,30 @@ class Article(dict):
                 'year':          None,
                 'url':           None,
                 'doi':           None}
+        self.update(attrs)
 
-        for key, value in attrs.iteritems():
-            self[key] = value
 
     def save(self):
         db = current_app.mongo.db
-        article = db.articles.find_one({"title" : self["title"], "year"  : self["year"]})
+        query = {"title" : self["title"], "year": self["year"]}
+        article = db.articles.find_one(query, as_class=dict)
         if article:
-            print "article exists"
-            db.articles.save(article)
+            self["_id"] = db.articles.save(article)
         else:
-            print "creating new article"
-            self["_id"] = db.articles.insert(self)
+            self["_id"] = db.articles.insert(self, safe=True)
 
         return self["_id"]
 
-    def as_txt(self):
-        # Get items sorted in specified order:
-        return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.iteritems()])
-
     @classmethod
-    def lookup(cls, query):
+    def lookup(cls, query, mult=False):
         """
         lookup an article in our db
         """
-        return current_app.mongo.db.articles.find_one_or_404(query)
+        db = current_app.mongo.db
+        if mult:
+            return db.articles.find(query)
+        else:
+            return db.articles.find_one_or_404(query)
 
     def disambiguate(self, other):
         """

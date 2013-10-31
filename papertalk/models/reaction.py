@@ -1,6 +1,6 @@
 from flask import current_app
 
-class Reaction(object):
+class Reaction(dict):
     """
     A reaction in papertalk.
     Title (str)
@@ -9,46 +9,42 @@ class Reaction(object):
     """
 
     def __init__(self):
-        self.attrs = ({'_id':   None,
-                      'title': None,
-                      'body':  None,
-                      'user':  None,
-                      'article_id': None})
+        attrs = ({'title': None,
+                 'body':  None,
+                 'user':  None,
+                 'article_id': None})
 
-    def __getitem__(self, key):
-        return self.attrs[key]
-
-    def __setitem__(self, key, item):
-        self.attrs[key] = item
-
-    def __delitem__(self, key):
-        del self.attrs[key]
-
-    def load(self, reaction_id):
-        self.attrs = current_app.mongo.db.reactions.find_one(reaction_id)
+        for key, value in attrs.iteritems():
+            self[key] = value        
 
     def save(self):
         """
         Called to save or update the reaction.
         """
         db = current_app.mongo.db
-        if self.attrs['_id']:
-            reaction = db.reactions.find_one({"_id" : self["_id"]})
-
-            if reaction:
-                print "updating reaction"
-                print self.as_txt()
-                db.reactions.save(self.attrs)
-            else:
-                raise Exception("weird. this reaction must have been deleted before an update.")
+        if '_id' in self:
+            db.reactions.update({"_id", self["_id"]},
+                                {"$set": self},
+                                safe=True)
         else:
             print "creating new reaction"
-            self.attrs["_id"] = db.reactions.insert(self.attrs)
+            self["_id"] = db.reactions.insert(self, safe=True)
 
-        return self.attrs["_id"]
+        return self["_id"]
 
-    def as_txt(self):
-        return '\n'.join(["%s: %s" % (item[0], item[1]) for item in self.attrs.iteritems()])
+    @classmethod
+    def lookup(cls, query, mult=False):
+        """
+        lookup a reaction in our db
+        """
+        if mult:
+            docs = current_app.mongo.db.reactions.find(query)
+            res = []
+            for d in docs:
+                reaction = Reaction()
+                reaction.update(d)
+                res.append(reaction)
+        else:
+            res = current_app.mongo.db.reactions.find_one(query)
 
-    def as_json(self):
-        return self.attrs
+        return res
