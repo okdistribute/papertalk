@@ -4,6 +4,7 @@ from server import make_app
 from models.sites import Scholar, Mendeley
 from flask.ext.testing import TestCase
 from flask import current_app
+import json
 
 class TestArticle(TestCase):
 
@@ -56,11 +57,37 @@ class TestArticle(TestCase):
 
         assert article
 
-        res = self.client.get("/article/{0}".format(article["_id"]))
+        res = self.client.get("/article/%s" % article["_id"])
         self.assert200(res)
 
-        res = self.client.get("/article/{0}".format("notaproperid"))
+        res = self.client.get("/article/notaproperid")
         self.assert400(res)
+
+class TestReaction(TestCase):
+
+    def create_app(self):
+        app = make_app()
+        app.config['TESTING'] = True
+        return app
+
+    def testReactionSave(self):
+        """
+        Should be able to create a reaction
+        """
+        title = "Visualizing Communication on Social Media: Making Big Data Accessible"
+        article = current_app.mongo.db.articles.find_one({"title": title})
+        res = self.client.post("/reaction/new", data=dict(
+          title="this is a reaction title",
+          article_id=article["_id"],
+          text="reaction text here"
+        ))
+        self.assert200(res)
+
+        res = self.client.get('/reaction/%s' % json.loads(res.data)["id"])
+        self.assert200(res)
+
+        assert "this is a reaction title" in res.data
+
 
 if __name__ == '__main__':
     unittest.main()

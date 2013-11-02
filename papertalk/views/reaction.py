@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 
 reaction_blueprint  = Blueprint("reaction", __name__)
 
-@reaction_blueprint.route('/reaction/<ObjectId:id>')
+@reaction_blueprint.route('/reaction/<ObjectId:id>', methods=["GET"])
 def reaction(id):
     context = {}
     db = current_app.mongo.db
@@ -27,8 +27,8 @@ def reaction_author():
         reaction['title'] = request.form['title'].strip()
         reaction['body'] = request.form['text']
         reaction['article_id'] = ObjectId(request.form['article_id'])
-        reaction.save()
-        return jsonify({'status': 'reaction saved'})
+        _id = reaction.save()
+        return jsonify({'id': _id})
 
 
 

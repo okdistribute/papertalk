@@ -13,8 +13,7 @@ class Article(dict):
 
 
     def __init__(self):
-        attrs = {'_id': None,
-                 'title':        None,
+        attrs = {'title':        None,
                 'authors':       [],
                 'source_urls':   [],
                 'reactions':     [],
