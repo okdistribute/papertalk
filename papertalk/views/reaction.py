@@ -25,10 +25,10 @@ def reaction_author():
     elif request.method == "POST":
         reaction = Reaction()
         reaction['title'] = request.form['title'].strip()
-        reaction['body'] = request.form['text']
+        reaction['body'] = request.form['body']
         reaction['article_id'] = ObjectId(request.form['article_id'])
         _id = reaction.save()
-        return jsonify({'id': _id})
+        return redirect("/article/%s" % reaction["article_id"])
 
 
 
