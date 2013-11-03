@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, current_app, redirect, url_for
 from papertalk.utils.utils import jsonify
-from papertalk.models.reaction import Reaction
+from papertalk.models import reaction
 from bson.objectid import ObjectId
 
 reaction_blueprint  = Blueprint("reaction", __name__)
@@ -23,12 +23,13 @@ def reaction_author():
         return render_template('reaction_author.html', **context)
 
     elif request.method == "POST":
-        reaction = Reaction()
-        reaction['title'] = request.form['title'].strip()
-        reaction['body'] = request.form['body']
-        reaction['article_id'] = ObjectId(request.form['article_id'])
-        _id = reaction.save()
-        return redirect("/article/%s" % reaction["article_id"])
+        title = request.form['title'].strip()
+        body = request.form['text']
+        article_id = request.form['article_id']
+        reaction.save(title=title,
+                      body=body,
+                      article_id=article_id)
 
+        return redirect("/article/%s" % reaction["article_id"])
 
 

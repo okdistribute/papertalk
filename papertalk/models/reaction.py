@@ -4,25 +4,24 @@ Title (str)
 Body (str) [markdown]
 User (str)
 """
-from flask import current_app
 from bson.objectid import ObjectId
+from papertalk.models import db
 
-db = current_app.mongo.db
 
-def update(cls, _id, *E, **doc):
+def update(_id, *E, **doc):
     """
-    called to update the reaction
+    Called to update the reaction
     """
     doc.update(*E)
 
-    return cls.db.reactions.update({"_id" : _id},
+    return db.reactions.update({"_id" : _id},
                                    {"$set": doc},
                                     safe=True)
 
 
-def save(cls, title, body, user_id, article_id, **doc):
+def save(title, body, user_id, article_id, **doc):
     """
-    Called to save the reaction.
+    Called to save or update the reaction.
     """
     doc.update({"title": title,
                 "body": body,
@@ -30,13 +29,13 @@ def save(cls, title, body, user_id, article_id, **doc):
                 "article_id": article_id})
 
 
-    _id = cls.db.reactions.insert(doc, safe=True)
+    _id = db.reactions.insert(doc, safe=True)
     return _id
 
 
-def lookup(cls, _id=None, article_id=None, user_id=None, mult=False):
+def lookup(_id=None, article_id=None, user_id=None, mult=False):
     """
-    lookup a reaction in our db
+    Lookup a reaction in our db
     """
 
     if article_id:
@@ -46,6 +45,6 @@ def lookup(cls, _id=None, article_id=None, user_id=None, mult=False):
     else:
         query = {"_id": _id}
     if mult:
-        return cls.db.reactions.find(query)
+        return db.reactions.find(query)
     else:
-        return cls.db.reactions.find_one(query)
+        return db.reactions.find_one(query)
