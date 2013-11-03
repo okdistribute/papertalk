@@ -35,6 +35,7 @@ class Site(object):
 
 class Scholar(Site):
 
+    # TODO looks like this scrape method is no longer used?
     @classmethod
     def _scrape(cls, soup, article):
         title = soup.find(id="title")
@@ -71,7 +72,12 @@ class Scholar(Site):
         scholarQuerier = scholar.ScholarQuerier(author)
         scholarQuerier.query(text)
 
-        return scholarQuerier.articles
+        search_results = scholarQuerier.articles
+        for sr in search_results:
+            sr['search_source'] = 'scholar'
+            sr['canonical_title'] = utils.canonicalize(sr['title'], sr['year'])
+
+        return search_results
 
 class Mendeley(Site):
 
@@ -99,18 +105,13 @@ class Mendeley(Site):
         response :=  [article, article article]
         """
         res = []
-        for article in documents:
-            try:
-                a = Article.lookup({"title": article["title"], "year": article["year"]})
-            except:
-                a = Article()
-                for author in article['authors']:
-                    a["authors"].append("%s %s" % (author['forename'], author['surname']))
-
-            a["doi"] = article['doi']
-            a['source_urls'].append(article['mendeley_url'])
-            a['title'] = article['title']
-            a['year'] = article['year']
+        for a in documents:
+            authors = a['authors']
+            a['authors'] = ["%s %s" % (author['forename'], author['surname']) for author in authors]
+            a['source_urls'] = [a['mendeley_url']]
+            a['source_id'] = a['uuid']
+            a['canonical_title'] = utils.canonicalize(a['title'], a['year'])
+            a['search_source'] = 'mendeley'
             res.append(a)
 
         return res

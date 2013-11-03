@@ -1,10 +1,11 @@
-from flask import render_template, request, Blueprint, current_app
+from flask import render_template, request, Blueprint, current_app, redirect, url_for
 from papertalk.utils.utils import jsonify
 from papertalk.models.reaction import Reaction
+from bson.objectid import ObjectId
 
 reaction_blueprint  = Blueprint("reaction", __name__)
 
-@reaction_blueprint.route('/reaction/<ObjectId:id>')
+@reaction_blueprint.route('/reaction/<ObjectId:id>', methods=["GET"])
 def reaction(id):
     context = {}
     db = current_app.mongo.db
@@ -18,14 +19,16 @@ def reaction(id):
 def reaction_author():
     if request.method == "GET":
         context = {}
+        context['article_id'] = request.args.get('article')
         return render_template('reaction_author.html', **context)
 
     elif request.method == "POST":
         reaction = Reaction()
         reaction['title'] = request.form['title'].strip()
-        reaction['body'] = request.form['text']
-        reaction.save()
-        return jsonify({'status': 'reaction saved'})
+        reaction['body'] = request.form['body']
+        reaction['article_id'] = ObjectId(request.form['article_id'])
+        _id = reaction.save()
+        return redirect("/article/%s" % reaction["article_id"])
 
 
 

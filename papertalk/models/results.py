@@ -12,6 +12,7 @@ def get_or_insert_articles(search_results):
 
         try:
             a = Article.lookup({'canonical_title': sr['canonical_title']})
+
         except:
             a = Article()
             a.update(sr)
