@@ -1,11 +1,11 @@
-import models, config
 from pymongo import MongoClient
+from flask import current_app
 
 def connect_db():
     c = config.Config
 
-    host = c.MONGO_URL
-    db_name = c.MONGO_DBNAME
+    host = current_app.config.MONGO_URL
+    db_name = current_app.config.MONGO_DBNAME
 
     conn = MongoClient(host=host,
                        tz_aware=True)
