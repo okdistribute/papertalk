@@ -1,4 +1,4 @@
-from papertalk import models, config
+import models, config
 from pymongo import MongoClient
 
 def connect_db():
