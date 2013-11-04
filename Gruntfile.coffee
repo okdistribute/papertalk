@@ -17,9 +17,11 @@ module.exports = (grunt) ->
         options:
           spawn: false
 
+
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-watch"
 
   grunt.registerTask "default", ["coffee"]
   grunt.registerTask "build", ["coffee"]
   grunt.registerTask "deploy", ["copy", "build", "clean"]
+  grunt.registerTask 'heroku:production', 'build'
