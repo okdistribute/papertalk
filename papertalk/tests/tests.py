@@ -2,7 +2,7 @@ __author__ = 'karissamckelvey'
 import unittest
 import json
 from models.sites import Scholar, Mendeley
-from papertalk_tests import PapertalkTestCase
+from tests import PapertalkTestCase
 
 class TestArticle(PapertalkTestCase):
 
