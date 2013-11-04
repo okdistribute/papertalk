@@ -14,9 +14,9 @@ def register_blueprints(app):
 def make_app():
     app = Flask(__name__)
     try:
-        app.config.from_object('config.Config')
+        app.config.from_object('papertalk.config.Config')
     except:
-        app.config.from_object('config_sample.Config')
+        app.config.from_object('papertalk.config_sample.Config')
         for key, value in app.config.iteritems():
             app.config[key] = os.environ.get(key)
 
