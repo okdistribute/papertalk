@@ -9,3 +9,5 @@ class Config(object):
     MONGO_DBNAME='papertalk'
     MONGO_USERNAME='travis'
     MONGO_PASSWORD='test'
+    MENDELEY_KEY =  ''
+    MENDELEY_SECRET = ''
