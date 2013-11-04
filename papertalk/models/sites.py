@@ -1,7 +1,7 @@
 __author__ = 'karissamckelvey'
 from BeautifulSoup import BeautifulSoup
-from papertalk.utils import utils, scholar
-from article import Article
+from papertalk import utils
+from papertalk.utils import scholar
 from papertalk.utils.mendeley import mendeley_client as mc
 import re
 
@@ -11,7 +11,7 @@ class Site(object):
     """
 
     @classmethod
-    def _scrape(cls, soup, article):
+    def _scrape(cls, soup):
         """
         function to implement when extending module
         """
@@ -21,10 +21,7 @@ class Site(object):
     def scrape(cls, url):
         html = utils.scrape(url)
         soup = BeautifulSoup(html)
-
-        article = Article()
-        article["source_urls"].append(url)
-        return cls._scrape(soup, article)
+        return cls._scrape(soup)
 
     @classmethod
     def search(cls, text=None, title=None, author=None, year=None):
@@ -37,8 +34,9 @@ class Scholar(Site):
 
     # TODO looks like this scrape method is no longer used?
     @classmethod
-    def _scrape(cls, soup, article):
+    def _scrape(cls, soup):
         title = soup.find(id="title")
+        article = {}
         if title and title.a:
             article["direct_url"] = title.a["href"]
             article["title"] = title.a.string
@@ -75,7 +73,7 @@ class Scholar(Site):
         search_results = scholarQuerier.articles
         for sr in search_results:
             sr['search_source'] = 'scholar'
-            sr['canonical_title'] = utils.canonicalize(sr['title'], sr['year'])
+            sr['canonical_title'] = utils.canonicalize(sr['title'])
 
         return search_results
 
@@ -107,10 +105,12 @@ class Mendeley(Site):
         res = []
         for a in documents:
             authors = a['authors']
-            a['authors'] = ["%s %s" % (author['forename'], author['surname']) for author in authors]
+            if authors:
+                a['firstauthor_surname'] = authors[0]['surname']
+                a['authors'] = ["%s %s" % (author['forename'], author['surname']) for author in authors]
             a['source_urls'] = [a['mendeley_url']]
             a['source_id'] = a['uuid']
-            a['canonical_title'] = utils.canonicalize(a['title'], a['year'])
+            a['canonical_title'] = utils.canonicalize(a['title'])
             a['search_source'] = 'mendeley'
             res.append(a)
 
@@ -130,7 +130,7 @@ class Mendeley(Site):
 class SSRN(Site):
 
     @classmethod
-    def _scrape(cls, soup, article):
+    def _scrape(cls, soup):
         ##TODO
         pass
 

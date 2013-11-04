@@ -1,5 +1,5 @@
-from flask import Flask, url_for
-from flask.ext.pymongo import PyMongo
+from flask import Flask, url_for, g
+from papertalk import connect_db
 import os
 
 def register_blueprints(app):
@@ -19,7 +19,6 @@ def make_app():
         app.config.from_object('config_sample.Config')
         for key, value in app.config.iteritems():
             app.config[key] = os.environ.get(key)
-    app.mongo = PyMongo(app)
 
     # Determines the destination of the build. Only usefull if you're using Frozen-Flask
     app.config['FREEZER_DESTINATION'] = os.path.dirname(os.path.abspath(__file__))+'/../build'
@@ -30,9 +29,22 @@ def make_app():
     )
     register_blueprints(app)
 
+    @app.before_request
+    def before_request():
+        g.db = connect_db()
+
     return app
 
 
 if __name__ == "__main__":
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument('-p', '--port', type=int, default=4324)
+    parser.add_argument('-d', '--debug', action='store_true', default=True)
+    parser.add_argument('--no-debug', action='store_false', dest='debug')
+
+    args = parser.parse_args()
+
     app = make_app()
-    app.run(port=4324, debug=True)
+
+    app.run(host='0.0.0.0', port=args.port, debug=args.debug)

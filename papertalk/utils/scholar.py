@@ -65,7 +65,6 @@ import re
 import urllib
 import urllib2
 from BeautifulSoup import BeautifulSoup
-from papertalk.models.article import Article
 
 
 class ScholarParser():
@@ -96,7 +95,7 @@ class ScholarParser():
             self._parse_article(div)
 
     def _parse_article(self, div):
-        self.article = Article()
+        self.article = {}
 
         for tag in div:
             if not hasattr(tag, 'name'):
@@ -162,7 +161,7 @@ class ScholarParser120201(ScholarParser):
     """
 
     def _parse_article(self, div):
-        self.article = Article()
+        self.article = {}
 
         for tag in div:
             if not hasattr(tag, 'name'):
@@ -189,7 +188,7 @@ class ScholarParser120726(ScholarParser):
     """
 
     def _parse_article(self, div):
-        self.article = Article()
+        self.article = {}
 
         for tag in div:
             if not hasattr(tag, 'name'):

@@ -1,19 +1,16 @@
-from flask import render_template, request, Blueprint, current_app, redirect, url_for
-from papertalk.utils.utils import jsonify
-from papertalk.models import reaction
-from bson.objectid import ObjectId
+from flask import render_template, request, Blueprint, redirect
+from papertalk.models import reactions, articles
 
 reaction_blueprint  = Blueprint("reaction", __name__)
 
-@reaction_blueprint.route('/reaction/<ObjectId:id>', methods=["GET"])
+@reaction_blueprint.route('/reaction/<id>', methods=["GET"])
 def reaction(id):
     context = {}
-    db = current_app.mongo.db
-    reaction = db.reactions.find_one_or_404({"_id" : id})
-    article = db.articles.find_one_or_404({"_id" : reaction['article_id']})
-    context["reaction"] = reaction
-    context["article"] = article
+    r = reactions.lookup(_id=id)
+    context["reaction"] = r
+    context["article"] = articles.lookup(_id=r['article_id'])
     return render_template('reaction.html', **context)
+
 
 @reaction_blueprint.route('/reaction/new', methods=["GET", "POST"])
 def reaction_author():
@@ -23,13 +20,14 @@ def reaction_author():
         return render_template('reaction_author.html', **context)
 
     elif request.method == "POST":
+        print "HELLO"
         title = request.form['title'].strip()
-        body = request.form['text']
+        body = request.form['body']
         article_id = request.form['article_id']
-        reaction.save(title=title,
-                      body=body,
-                      article_id=article_id)
+        reactions.save(title=title,
+                       body=body,
+                       article_id=article_id)
 
-        return redirect("/article/%s" % reaction["article_id"])
+        return redirect("/article/%s" % article_id)
 
 

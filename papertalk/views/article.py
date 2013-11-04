@@ -1,21 +1,15 @@
 from flask import render_template, request, Blueprint
-from papertalk.utils import utils
-from papertalk.models.results import get_or_insert_articles
+from papertalk import utils
 from papertalk.models.sites import Scholar, Mendeley
-from papertalk.models.article import Article
-from papertalk.models.reaction import Reaction
-from bson.objectid import ObjectId
-
+from papertalk.models import reactions, articles
 
 article_blueprint = Blueprint("article", __name__)
 
-@article_blueprint.route('/article/<ObjectId:_id>')
+@article_blueprint.route('/article/<_id>')
 def article(_id):
     context = {}
-    article = Article.lookup({'_id': _id})
-    reactions = Reaction.lookup({"article_id": ObjectId(_id)}, mult=True)
-    context["article"] = article
-    context["reactions"] = reactions
+    context["article"] = articles.lookup(_id=_id)
+    context["reactions"] = reactions.lookup(article_id=_id, mult=True)
 
     return render_template('article.html', **context)
 
@@ -27,15 +21,24 @@ def article_search():
     This could be a title (most likely); or an author
     """
     text = request.args.get("query")
-    print text
 
     search_results = Mendeley.search(text)
     #search_results += Scholar.search(text)
 
-    articles = get_or_insert_articles(search_results)
     return render_template("results.html",
                            query=text,
-                           articles=articles)
+                           articles=articles.get_or_insert(search_results))
+
+@article_blueprint.route("/article/lookup", methods=["GET"])
+def article_lookup():
+    """
+    Lookup article by title, or year
+    """
+    title = request.args.get("title", None)
+    year = request.args.get("year", None)
+
+    return utils.jsonify({"article": articles.lookup(title=title, year=year)})
+
 
 @article_blueprint.route('/article/url', methods=["GET"])
 def add_article():
@@ -54,7 +57,5 @@ def add_article():
     }[site]
 
     return utils.jsonify(article)
-
-
 
 

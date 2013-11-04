@@ -1,17 +1,10 @@
 __author__ = 'karissamckelvey'
 import unittest
-from server import make_app
-from models.sites import Scholar, Mendeley
-from flask.ext.testing import TestCase
-from flask import current_app
 import json
+from models.sites import Scholar, Mendeley
+from papertalk_tests import PapertalkTestCase
 
-class TestArticle(TestCase):
-
-    def create_app(self):
-        app = make_app()
-        app.config['TESTING'] = True
-        return app
+class TestArticle(PapertalkTestCase):
 
     def testFromScholarURL(self):
         """
@@ -26,7 +19,6 @@ class TestArticle(TestCase):
         self.assertEqual(article["num_citations"], 7)
         self.assertEqual(article["year"], 2012)
 
-
     def testMendeley(self):
         text = "visualizing communication on social media: making big data accessible"
         articles = Mendeley.search(text)
@@ -40,11 +32,12 @@ class TestArticle(TestCase):
         """
         Save the article and retrieve it
         """
-        url = "http://scholar.google.com/citations?view_op=view_citation&hl=en&user=RM2tB8EAAAAJ&citation_for_view=RM2tB8EAAAAJ:u5HHmVD_uO8C"
-        article = Scholar.scrape(url)
-        article.save()
+        text = "visualizing communication on social media: making big data accessible"
+        res = self.client.get("/article/search?query=%s" % text)
+        self.assert200(res)
+        self.assertIn('visualizing', res.data)
 
-        article = current_app.mongo.db.articles.find_one({"title" : article['title']})
+        article = self.get_article()
         self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
 
 
@@ -52,10 +45,7 @@ class TestArticle(TestCase):
         """
         View the article
         """
-        title = "Visualizing Communication on Social Media: Making Big Data Accessible"
-        article = current_app.mongo.db.articles.find_one({"title" : title})
-
-        assert article
+        article = self.get_article()
 
         res = self.client.get("/article/%s" % article["_id"])
         self.assert200(res)
@@ -63,19 +53,14 @@ class TestArticle(TestCase):
         res = self.client.get("/article/notaproperid")
         self.assert400(res)
 
-class TestReaction(TestCase):
+class TestReaction(PapertalkTestCase):
 
-    def create_app(self):
-        app = make_app()
-        app.config['TESTING'] = True
-        return app
 
     def testReactionSave(self):
         """
         Should be able to create a reaction
         """
-        title = "Visualizing Communication on Social Media: Making Big Data Accessible"
-        article = current_app.mongo.db.articles.find_one({"title": title})
+        article = self.get_article()
         res = self.client.post("/reaction/new", data=dict(
           title="this is a reaction title",
           article_id=article["_id"],
@@ -86,7 +71,7 @@ class TestReaction(TestCase):
         res = self.client.get('/reaction/%s' % json.loads(res.data)["id"])
         self.assert200(res)
 
-        assert "this is a reaction title" in res.data
+        self.assertIn("this is a reaction title", res.data)
 
 
 if __name__ == '__main__':
