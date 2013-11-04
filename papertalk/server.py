@@ -33,6 +33,8 @@ def make_app():
     def before_request():
         g.db = connect_db()
 
+    app.config['DEBUG'] = True
+
     return app
 
 
