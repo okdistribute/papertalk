@@ -1,0 +1,15 @@
+language: python
+services: mongodb
+
+python:
+  - "2.7"
+
+# command to install dependencies
+install: "pip install -r requirements.txt"
+
+before_script:
+  - mongo papertalk --eval 'db.addUser("travis", "test");'
+  - export PYTHONPATH=`pwd`
+  
+# command to run tests
+script: python papertalk/tests.py 

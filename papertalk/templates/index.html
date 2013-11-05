@@ -7,7 +7,7 @@
         <div class="col-lg-9 col-lg-offset-2">
             <div class="header">
                 <h1>
-                    <div class="title pull-left">Papertalk<small>beta</small></div>
+                    <div class="header-title pull-left">Papertalk<small>beta</small></div>
                     <img class="pull-right" src="/static/img/papertalk.png" id="logo"/>
                 </h1>
             </div>
@@ -15,23 +15,19 @@
     </div>
     <div class="row">
         <div class="col-lg-6 col-lg-offset-3">
-            <div class="input-group">
-                <input type="text" class="form-control" id="articleInput" placeholder="e.g. collective dynamics watts">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary btn-large" type="button" id="articleGo">search</button>
-                </span>
-
+                <form action="/article/search" id="articleForm" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="query" class="form-control" id="articleInput" placeholder="e.g. collective dynamics watts">
+                        <input type="hidden" name="site" id="siteInput" value="unknown">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-large" type="submit" id="articleGo">search</button>
+                        </span>
+                    </div>
+                </form>
 
                     <div id="status"></div>
-            </div><!-- /input-group -->
-            <div id="papersites" class="panel-body">
-                <p class="muted">enter a title and author <br>or a link to an article from one of these services:</p>
-                 <img src="/static/img/google_scholar_logo.JPG" class="faded" id="scholar"/>
-                 <img src="/static/img/logo-mendeley.png" class="faded" id="mendeley"/>
-                 <img src="/static/img/ssrn-logo.png" class="faded" id="ssrn"/>
-            </div>
-        </div><!-- /.col-lg-6 -->
-    </div><!-- /.row -->
+        </div>
+    </div>
 </div>
 
 

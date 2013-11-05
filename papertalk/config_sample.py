@@ -4,10 +4,10 @@ class Config(object):
     """
     DEBUG = True
     TESTING = True
-    MONGO_HOST = ''
-    MONGO_PORT = 0000
-    MONGO_DBNAME = ''
-    MONGO_USERNAME = ''
-    MONGO_PASSWORD = ''
+    MONGO_HOST='localhost'
+    MONGO_PORT=27018
+    MONGO_DBNAME='papertalk'
+    MONGO_USERNAME='travis'
+    MONGO_PASSWORD='test'
     MENDELEY_KEY =  ''
     MENDELEY_SECRET = ''

@@ -61,9 +61,25 @@ p {
     margin: 40px 0 20px;
 }
 
-.title {
+.header-title {
     padding-top: 170px;
     font-size: 80px;
+}
+
+.article-title {
+    font-size: 32px;
+}
+
+.reaction-title {
+    font-size: 32px;
+}
+
+.author {
+    font-size: 26px;
+}
+
+.year {
+    font-size: 26px;
 }
 
 @media (max-width: 780px) {
@@ -72,7 +88,7 @@ p {
         width: 75px;
     }
 
-    .title {
+    .header-title {
         font-size: 48px;
         padding-top:100px;
         padding-bottom:10px;

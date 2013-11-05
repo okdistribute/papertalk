@@ -1,31 +1,46 @@
-from flask import render_template, request
-from papertalk import papertalk, mongo
-from papertalk.utils.utils import jsonify
-from papertalk.models.sites import Scholar
+from flask import render_template, request, Blueprint
+from papertalk import utils
+from papertalk.models.sites import Scholar, Mendeley
+from papertalk.models import reactions, articles
 
-@papertalk.route('/article/<int:id>')
-def article(id):
+article_blueprint = Blueprint("article", __name__)
+
+@article_blueprint.route('/article/<_id>')
+def article(_id):
     context = {}
-    context["article"] = mongo.db.find_one({"_id" : id})
+    context["article"] = articles.lookup(_id=_id)
+    context["reactions"] = reactions.lookup(article_id=_id, mult=True)
+
     return render_template('article.html', **context)
 
-@papertalk.route("/article/search")
+
+@article_blueprint.route("/article/search", methods=["GET"])
 def article_search():
     """
     Parses the article from a given search string.
     This could be a title (most likely); or an author
     """
-    text = request.args.get("query", "")
-    print text
+    text = request.args.get("query")
 
-    ##TODO right now, it always assumes google scholar. need to cycle through sites
-    articles = Scholar.search(text=text)
-    print articles
+    search_results = Mendeley.search(text)
+    #search_results += Scholar.search(text)
 
-    return jsonify({"articles" : [a.as_json() for a in articles]})
+    return render_template("results.html",
+                           query=text,
+                           articles=articles.get_or_insert(search_results))
+
+@article_blueprint.route("/article/lookup", methods=["GET"])
+def article_lookup():
+    """
+    Lookup article by title, or year
+    """
+    title = request.args.get("title", None)
+    year = request.args.get("year", None)
+
+    return utils.jsonify({"article": articles.lookup(title=title, year=year)})
 
 
-@papertalk.route('/article/url', methods=["POST"])
+@article_blueprint.route('/article/url', methods=["GET"])
 def add_article():
     """
     Scrapes the url and returns a new article
@@ -36,9 +51,11 @@ def add_article():
     print site
     print url
 
-    ##TODO right now, it always assumes google scholar. need to check which site it is and load appropriately
-    article = Scholar.scrape(url)
+    article = {
+        "scholar" : Scholar.scrape(url),
+        "mendeley" : Mendeley.scrape(url)
+    }[site]
 
-    return jsonify(article.attrs)
+    return utils.jsonify(article)
 
 

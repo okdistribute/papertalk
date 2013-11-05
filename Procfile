@@ -1,1 +1,1 @@
-web: gunicorn papertalk:papertalk
+web: gunicorn papertalk.wsgi:app

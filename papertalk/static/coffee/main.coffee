@@ -7,39 +7,23 @@ sites = [{"name": "scholar",\
 
 check_url = (url) ->
     sites.forEach (site) ->
-        re = RegExp(site["regex"])
+        re = RegExp(site.regex)
+        articleForm = $("#articleForm")
+        siteField = $("#siteInput")
         if re.test(url)
-            console.log(site["name"], url)
-            $("#" + site["name"]).removeClass("faded")
-            return site
+            # url
+            console.log(site.name, url)
+            articleForm.attr("action", "/article/url")
+            $("#" + site.name).removeClass("faded")
+            siteField.attr("value", "unknown")
         else
-            $("#" + site["name"]).addClass("faded")
+            # search
+            console.log(site.name)
+            articleForm.attr("action", "/article/search")
+            $("#" + site.name).addClass("faded")
+            siteField.attr("value", site.name)
 
-        return null
 
 $("#articleInput").keyup () ->
     text = $(this).val()
-    site = check_url(text)
-
-$("#articleGo").click () ->
-    text = $("#articleInput").val()
-    site = check_url(text)
-    if site
-        $.ajax "/article/url",
-            type: "POST"
-            data:
-                site: site,
-                url: text
-            error: () ->
-                alert("failed to grab article")
-            success: (data) ->
-                console.log(data)
-    else
-        $.ajax "/article/search",
-            type: "GET"
-            data:
-                query: text
-            error: () ->
-                alert("failed to grab article")
-            success: (data) ->
-                console.log(data)
+    check_url(text)
