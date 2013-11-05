@@ -31,6 +31,9 @@
 
     <!-- Add your site or application content here -->
     <div class="wrap">
+        {% if page != "index" %} 
+        {% include "_navbar.html" %}
+        {% endif %}
         <div id="main" class="container">
             {% block content %}
             {% endblock %}
@@ -39,7 +42,14 @@
 
     <div id="footer" class="center">
         <p>
-            Papertalk is <a href="http://github.com/karissamck/papertalk" target="_blank">open source</a>. Go fork and pull request. It'll get merged.
+            <a href="http://twitter.com/papertalk_" target="_blank">Twitter</a> |
+            <a href="http://github.com/karissamck/papertalk" target="_blank">Github</a>
+            |
+            <a href="/about">About</a> |
+            <a href="/get-involved">Get involved</a>
+        </p>
+
+        <p>
         </p>
     </div>
 

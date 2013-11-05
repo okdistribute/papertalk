@@ -41,6 +41,10 @@ h1 {
     text-rendering: optimizeLegibility;
 }
 
+p {
+    font-size: 16px;
+}
+
 .btn-primary {
     border-color: #e67e22;
     background-color: #e67e22;
