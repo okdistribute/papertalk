@@ -31,6 +31,9 @@
 
     <!-- Add your site or application content here -->
     <div class="wrap">
+        {% if page != "index" %} 
+        {% include "_navbar.html" %}
+        {% endif %}
         <div id="main" class="container">
             {% block content %}
             {% endblock %}
