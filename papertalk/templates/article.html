@@ -2,6 +2,7 @@
 
 {% block content %}
 <span class="article-title"><a href="{{article.url}}">{{article.title}}</a></span>
+
 <div class="authors">
 	{% for a in article.authors %} 
 		<span class="author">{{a}}</span>
