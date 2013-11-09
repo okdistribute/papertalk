@@ -26,10 +26,12 @@ Your reaction
         <div id="wmd-preview" class="col-lg-6"></div>
     </div>
     <div class="input-group" style="min-height: 20px;"></div>
-    <div class="row">
-        <!-- <span class="input-group-btn"> -->
-            <button class="btn btn-primary btn-large" type="submit" id="reactionSave">Save</button>
-        <!-- </span> -->
+    <div class="row pull-right">
+        <a class="btn btn-default btn-large"
+           type="submit"
+           href="/article/{{article_id}}"
+           id="cancel">Cancel</a>
+        <button class="btn btn-primary btn-large" type="submit">Create</button>
     </div>
 </form>
 
