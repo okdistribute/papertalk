@@ -17,7 +17,7 @@ def reaction(id):
 def reaction_author(article_id):
     form = ReactionForm(request.form)
 
-    if request.method == "POST" and form.validate:
+    if request.method == "POST" and form.validate():
         reactions.save(title=form.title.data,
                        body=form.body.data,
                        article_id=article_id)
@@ -26,5 +26,6 @@ def reaction_author(article_id):
     context = {}
     context['article_id'] = article_id
     context['form'] = form
+
     return render_template('reaction_author.html', **context)
 
