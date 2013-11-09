@@ -9,3 +9,4 @@ oauth
 requests
 httplib2
 Flask-Testing
+disqus-python
