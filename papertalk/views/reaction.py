@@ -21,7 +21,7 @@ def reaction_author(article_id):
         reactions.save(title=form.title.data,
                        body=form.body.data,
                        article_id=article_id)
-        return redirect("/article/%s" % article_id)
+        return redirect("/article/view/%s" % article_id)
 
     context = {}
     context['article_id'] = article_id
