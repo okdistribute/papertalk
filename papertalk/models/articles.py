@@ -65,7 +65,7 @@ def get_or_insert(articles):
     find articles where title-first author the same, or title-year the same
     """
 
-    res = []
+    res = {}
 
     for a in articles:
         our_article = lookup(title=a['title'],
@@ -73,10 +73,11 @@ def get_or_insert(articles):
                              mult=False)
 
         if our_article:
-            res.append(our_article)
+            _id = our_article['_id']
+            res[_id] = our_article
         else:
-            save(**a)
-            res.append(a)
+            _id = save(**a)
+            res[_id] = a
 
-    return res
+    return res.values()
 

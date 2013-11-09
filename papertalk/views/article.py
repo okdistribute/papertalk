@@ -21,13 +21,12 @@ def article_search():
     This could be a title (most likely); or an author
     """
     text = request.args.get("query")
-
     search_results = Mendeley.search(text)
-    #search_results += Scholar.search(text)
 
     return render_template("results.html",
                            query=text,
                            articles=articles.get_or_insert(search_results))
+
 
 @article_blueprint.route("/article/lookup", methods=["GET"])
 def article_lookup():
