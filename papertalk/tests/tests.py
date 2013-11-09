@@ -40,7 +40,6 @@ class TestArticle(PapertalkTestCase):
         article = self.get_article()
         self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
 
-
     def testViewArticle(self):
         """
         View the article
@@ -54,7 +53,6 @@ class TestArticle(PapertalkTestCase):
         self.assert400(res)
 
 class TestReaction(PapertalkTestCase):
-
 
     def testReactionSave(self):
         """

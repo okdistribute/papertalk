@@ -108,10 +108,9 @@ class Mendeley(Site):
             if authors:
                 a['firstauthor_surname'] = authors[0]['surname']
                 a['authors'] = ["%s %s" % (author['forename'], author['surname']) for author in authors]
-            a['source_urls'] = [a['mendeley_url']]
+            a['url'] = a['mendeley_url']
             a['source_id'] = a['uuid']
             a['canonical_title'] = utils.canonicalize(a['title'])
-            a['search_source'] = 'mendeley'
             res.append(a)
 
         return res
