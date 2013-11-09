@@ -2,13 +2,25 @@ from papertalk import utils
 from bson.objectid import ObjectId
 from flask import g
 
-def update(_id, *E, **doc):
+
+def add_reaction(_id, reaction_id):
+    """
+    Add a reaction to an article
+    """
+
+    article = lookup(_id=_id)
+    r = article.get('reactions', [])
+    r.append(reaction_id)
+    update(article, reactions=r)
+
+
+def update(article, *E, **doc):
     """
     Called to update an article
     """
     doc.update(*E)
 
-    return g.db.articles.update({"_id" : _id},
+    return g.db.articles.update({"_id" : article['_id']},
                                 {"$set": doc},
                                 safe=True)
 

@@ -6,6 +6,7 @@ User (str)
 """
 from bson.objectid import ObjectId
 from flask import g
+import articles
 
 def update(_id, *E, **doc):
     """
@@ -27,7 +28,9 @@ def save(title=None, body=None, article_id=None, **doc):
                 "article_id": ObjectId(article_id)})
 
     _id = g.db.reactions.insert(doc, safe=True)
-    print _id
+
+
+    articles.add_reaction(article_id, _id)
 
     return _id
 
@@ -36,13 +39,14 @@ def lookup(_id=None, article_id=None, user_id=None, mult=False):
     """
     Lookup a reaction in our g.db
     """
+    query = {}
 
     if article_id:
-        query = {"article_id": ObjectId(article_id)}
-    elif user_id:
-        query = {"user_id": ObjectId(user_id)}
-    else:
-        query = {"_id": ObjectId(_id)}
+        query["article_id"] = ObjectId(article_id)
+    if user_id:
+        query["user_id"] = ObjectId(user_id)
+    if _id:
+        query["_id"] = ObjectId(_id)
 
     if mult:
         return g.db.reactions.find(query)
