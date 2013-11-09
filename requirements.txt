@@ -1,12 +1,13 @@
 Flask==0.9
 Jinja2==2.6
 Werkzeug==0.8.3
-Flask-PyMongo
 gunicorn==0.17.2
+Flask-PyMongo
+Flask-Testing
+Flask-WTF
 BeautifulSoup
 pymongo
 oauth
 requests
 httplib2
-Flask-Testing
 disqus-python
