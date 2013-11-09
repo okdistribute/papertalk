@@ -5,7 +5,7 @@ from papertalk.models import reactions, articles
 
 article_blueprint = Blueprint("article", __name__)
 
-@article_blueprint.route('/article/<_id>')
+@article_blueprint.route('/article/view/<_id>')
 def article(_id):
     context = {}
     context["article"] = articles.lookup(_id=_id)
