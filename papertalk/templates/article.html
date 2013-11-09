@@ -12,19 +12,22 @@
 </div>
 
 <h2>Reactions</h2>
-<a class="btn btn-primary btn-large" type="button" id="reactionNew" href="/reaction/new?article={{article._id}}">New Reaction</a>
+<a class="btn btn-primary btn-large" 
+    type="button" 
+    id="reactionNew" 
+    href="/article/{{article._id}}/reaction/new">New Reaction
+</a>
 
 <ul>
 	{% for reaction in reactions %}
-		<li><a href="/reaction/{{reaction._id}}"><span class="reaction-title">{{reaction.title}}</span></a></li>
+    <li>
+        <a href="/reaction/{{reaction._id}}">
+            <span class="reaction-title">{{reaction.title}}</span>
+        </a>
+    </li>
 	{% endfor %}
 </ul>
-<!-- <div class="moot" 
-     id="article-moot"
-     href="https://moot.it/i/labmeeting/articles/{{article.id}}">
-     {{article.title}}
- </div>
- -->
+
 <script src="{{url_for('static', filename='js/article.js')}}"></script>
 {% endblock %}
 
