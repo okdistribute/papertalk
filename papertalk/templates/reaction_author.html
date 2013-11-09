@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if form.errors %}
+<div class="alert alert-danger">Reaction must have a title and a body.</div>
+{% endif %}
 
 <div>
 <h1>Write a reaction</h1>
-<form class="form-horizontal" action="/reaction/new"
-      method="POST" role="form">
+<form class="form-horizontal" method="POST" role="form">
     <div id="wmd-button-bar" style="display:none"></div>
     <div class="control-group">
         <input name="title"
@@ -14,7 +16,6 @@
                id="reaction-title"
                placeholder="Reaction Title" />
     </div>
-    <input type="hidden" value="{{article_id}}" name="article_id" id="article-id" />
     <div class="input-group" style="min-height: 20px;"></div>
     <div class="row">
         <div class="col-lg-6">
@@ -25,10 +26,12 @@ Your reaction
         <div id="wmd-preview" class="col-lg-6"></div>
     </div>
     <div class="input-group" style="min-height: 20px;"></div>
-    <div class="row">
-        <!-- <span class="input-group-btn"> -->
-            <button class="btn btn-primary btn-large" type="submit" id="reactionSave">Save</button>
-        <!-- </span> -->
+    <div class="row pull-right">
+        <a class="btn btn-default btn-large"
+           type="submit"
+           href="/article/{{article_id}}"
+           id="cancel">Cancel</a>
+        <button class="btn btn-primary btn-large" type="submit">Create</button>
     </div>
 </form>
 
