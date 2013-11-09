@@ -82,6 +82,11 @@ p {
     font-size: 26px;
 }
 
+.wepay-widget-button {
+    padding: 6px 12px !important;
+    color: black !important;
+}
+
 @media (max-width: 780px) {
 
     #papersites > img {
