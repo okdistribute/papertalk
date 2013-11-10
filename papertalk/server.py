@@ -1,6 +1,24 @@
-from flask import Flask, url_for, g
+from flask import Flask, url_for, session, g
 from papertalk import connect_db
+from papertalk.models import users
+from flask_login import LoginManager, current_user
 import os
+
+def init_login(app):
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(_id):
+        return users.get(_id)
+
+    # Make current user available on templates
+    @app.context_processor
+    def inject_user():
+        try:
+            return {'user': g.user}
+        except AttributeError:
+            return {'user': None}
 
 def register_blueprints(app):
     from papertalk.views.reaction import reaction_blueprint
@@ -20,21 +38,29 @@ def make_app():
         for key, value in app.config.iteritems():
             app.config[key] = os.environ.get(key)
 
-    # Determines the destination of the build. Only usefull if you're using Frozen-Flask
-    app.config['FREEZER_DESTINATION'] = os.path.dirname(os.path.abspath(__file__))+'/../build'
+    app.secret_key = app.config['SECRET_KEY']
+
+
     # Function to easily find your assets
     # In your template use <link rel=stylesheet href="{{ static('filename') }}">
     app.jinja_env.globals['static'] = (
         lambda filename: url_for('static', filename = filename)
     )
+
+    init_login(app)
     register_blueprints(app)
+
+    from papertalk import twitter
+    @twitter.tokengetter
+    def get_twitter_token(token=None):
+        return session.get('twitter_token')
 
     @app.before_request
     def before_request():
         g.db = connect_db()
+        g.user = current_user
 
     app.config['DEBUG'] = True
-
     return app
 
 

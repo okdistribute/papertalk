@@ -1,6 +1,8 @@
 import urllib
 from pymongo import MongoClient
 from flask import current_app
+from papertalk.config import Config
+from flask_oauth import OAuth
 
 def connect_db():
     c = current_app.config
@@ -15,4 +17,16 @@ def connect_db():
 
     db = conn[c['MONGO_DBNAME']]
     return db
+
+oauth = OAuth()
+
+twitter = oauth.remote_app('twitter',
+    base_url='https://api.twitter.com/1/',
+    request_token_url='https://api.twitter.com/oauth/request_token',
+    access_token_url='https://api.twitter.com/oauth/access_token',
+    authorize_url='https://api.twitter.com/oauth/authenticate',
+    consumer_key= Config.TWITTER_KEY,
+    consumer_secret= Config.TWITTER_SECRET
+)
+
 
