@@ -29,6 +29,7 @@ def register_blueprints(app):
     app.register_blueprint(main_blueprint)
     app.register_blueprint(reaction_blueprint)
 
+
 def make_app():
     app = Flask(__name__)
     try:
