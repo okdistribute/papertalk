@@ -5,12 +5,12 @@ import simplejson
 import time
 from flask import current_app
 
-def get_sso(user):
+def get_sso_script(user):
     # create a JSON packet of our data attributes
     data = simplejson.dumps({
-        'id': user['id'],
-        'username': user['username'],
-        'email': user['email'],
+        'id': user['_id'],
+        'username': user['screen_name'],
+        'email': user.get('email', None),
         'url': user.get('url', None)
     })
     # encode the data to base64
@@ -18,7 +18,7 @@ def get_sso(user):
     # generate a timestamp for signing the message
     timestamp = int(time.time())
     # generate our hmac signature
-    sig = hmac.HMAC(current_app.settings.DISQUS_SECRET, '%s %s' % (message, timestamp), hashlib.sha1).hexdigest()
+    sig = hmac.HMAC(current_app.config['DISQUS_SECRET'], '%s %s' % (message, timestamp), hashlib.sha1).hexdigest()
 
     # return a script tag to insert the sso message
     return """<script type="text/javascript">
@@ -30,5 +30,5 @@ def get_sso(user):
         message=message,
         timestamp=timestamp,
         sig=sig,
-        pub_key=current_app.settings.DISQUS_PUBLIC,
+        pub_key=current_app.config['DISQUS_PUBLIC'],
     )
