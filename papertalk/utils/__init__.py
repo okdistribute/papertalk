@@ -48,7 +48,7 @@ def canonicalize(title):
         """
         normalizes given string for the canonicalization
         """
-        if not isinstance(s, str):
+        if not isinstance(s, basestring):
             return ''
 
         res = s.lower().strip() ## lowercase and remove outer spaced
