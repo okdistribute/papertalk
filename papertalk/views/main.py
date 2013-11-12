@@ -1,13 +1,13 @@
 from flask import render_template, Blueprint, url_for, g, session, flash, request, redirect
 from flask_login import login_required, login_user, logout_user, current_user
 from papertalk.models import users
-from papertalk import twitter
+from papertalk import google
 
 main_blueprint  = Blueprint("main", __name__)
 
 @main_blueprint.route('/')
 def index():
-	return render_template('index.html')
+    return render_template('index.html')
 
 @main_blueprint.route('/about')
 def about():
@@ -18,29 +18,31 @@ def get_involved():
 	return render_template('get-involved.html')
 
 @main_blueprint.route('/oauth-authorized')
-@twitter.authorized_handler
+@google.authorized_handler
 def oauth_authorized(resp):
+    access_token = resp['access_token']
+    session['access_token'] = access_token, ''
+
     next_url = request.args.get('next') or '/'
     if resp is None:
         return redirect(next_url)
 
-    user = users.get(screen_name=resp['screen_name'])
+    user = users.get(screen_name=resp['email'])
     if not user:
-        user = users.create(resp['screen_name'], resp['oauth_token'], resp['oauth_token_secret'])
+        user = users.create(resp['email'], resp['client_id'], resp['client_secret'])
 
     login_user(user)
-    data = twitter.get('account/verify_credentials.json').data
-    users.update(user, avatar=data['profile_image_url'], url=data['url'], email='unique@uniquewa.unei')
+    users.update(user, email=resp['email'])
 
-    flash('You were signed in as %s' % user['screen_name'])
+    flash('You were signed in as %s' % user['email'])
     return redirect(next_url)
 
 @main_blueprint.route('/login')
 def login():
     if current_user.is_authenticated():
         return redirect('/')
-    return twitter.authorize(callback=url_for('.oauth_authorized',
-        next=request.args.get('next') or request.referrer or None))
+    callback=url_for('.oauth_authorized', _external=True)
+    return google.authorize(callback=callback)
 
 @main_blueprint.route("/settings")
 @login_required
