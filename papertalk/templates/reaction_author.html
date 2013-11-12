@@ -12,7 +12,7 @@
     <div class="control-group">
         <input name="title"
                type="text"
-               class="form-control"
+               class="form-control input-lg"
                id="reaction-title"
                placeholder="Reaction Title" />
     </div>
@@ -23,14 +23,15 @@
           <li><a href="#tabs-2">Preview</a></li>
         </ul>
         <div id="tabs-1">
-          <div class="acol-lg-6">
-            <textarea id="wmd-input" name="body" class="form-control" style="min-height: 400px; max-height: 400px;">
-  Your reaction
+          <div class="acol-lg-6" style="min-height: 400px; max-height: 400px;">
+            <textarea id="wmd-input" name="body" class="form-control" style="min-height: 400px; max-height: 400px; resize: none;">
+Your reaction
   </textarea>
+          <p class="text-muted"><small>You can use markdown to structure your reaction</small></p>
           </div>
         </div>
         <div id="tabs-2">
-          <div id="wmd-preview" class="acol-lg-6"></div>
+          <div id="wmd-preview" class="acol-lg-6" style="min-height: 400px; max-height: 400px;"></div>
         </div>
     </div>
     <div class="input-group" style="min-height: 20px;"></div>
