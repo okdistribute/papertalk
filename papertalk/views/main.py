@@ -1,7 +1,9 @@
-from flask import render_template, Blueprint, url_for, g, session, flash, request, redirect
+from flask import render_template, Blueprint, url_for, g, flash, request, redirect, session
 from flask_login import login_required, login_user, logout_user, current_user
 from papertalk.models import users
 from papertalk import google
+import json
+import urllib2, urllib
 
 main_blueprint  = Blueprint("main", __name__)
 
@@ -27,14 +29,25 @@ def oauth_authorized(resp):
     if resp is None:
         return redirect(next_url)
 
-    user = users.get(screen_name=resp['email'])
+    ## get user data
+    params = {
+        'access_token': resp['access_token'],
+        }
+    payload = urllib.urlencode(params)
+    url = 'https://www.googleapis.com/oauth2/v1/userinfo?' + payload
+
+    req = urllib2.Request(url)  # must be GET
+    data = json.loads(urllib2.urlopen(req).read())
+
+    email = data['email']
+
+    user = users.get(username=email)
     if not user:
-        user = users.create(resp['email'], resp['client_id'], resp['client_secret'])
+        user = users.create(email, email, data['id'], resp['id_token'])
 
     login_user(user)
-    users.update(user, email=resp['email'])
 
-    flash('You were signed in as %s' % user['email'])
+    flash('You were signed in as %s' % user['username'])
     return redirect(next_url)
 
 @main_blueprint.route('/login')

@@ -17,7 +17,7 @@ def init_login(app):
     @app.context_processor
     def inject_user():
         try:
-            return {'current_user': g.current_user}
+            return {'current_user': g.user}
         except AttributeError:
             return {'current_user': None}
 
@@ -51,7 +51,6 @@ def make_app():
     @app.before_request
     def before_request():
         g.db = connect_db()
-        g.current_user = current_user
 
     init_login(app)
     register_blueprints(app)

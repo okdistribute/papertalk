@@ -34,8 +34,8 @@
               data-dnt="true">Tweet</a>
           </li>
 
-          {% if current_user.is_authenticated() %}
-          <li><a href="#">{{current_user.screen_name}}</a></li>
+          {% if g.user and g.user.is_authenticated() %}
+          <li><a href="#">{{g.user.screen_name}}</a></li>
           <li><a href="/logout">Logout</a></li>
           {% else %}
           <li><a href="/login">Login</a></li>
