@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="{{ static('css/main.css')}}">
   </head>
   <body> 
     <!--[if lt IE 7]>
@@ -45,7 +45,10 @@
             <a href="http://github.com/karissamck/papertalk" target="_blank">Github</a>
             |
             <a href="/about">About</a> |
-            <a href="/get-involved">Get involved</a>
+            <a href="/get-involved">Get involved</a> |
+            <a  id="wepay_widget_anchor_527d657a383a2" target="_blank"
+                href="https://www.wepay.com/donations/1857981339">Donate</a><script type="text/javascript">var WePay = WePay || {};WePay.load_widgets = WePay.load_widgets || function() { };WePay.widgets = WePay.widgets || [];WePay.widgets.push( {object_id: 1857981339,widget_type: "donation_campaign",anchor_id: "wepay_widget_anchor_527d657a383a2",widget_options: {list_suggested_donations:
+              true,allow_cover_fee: true,enable_recurring: true,allow_anonymous: true,reference_id: ""}});if (!WePay.script) {WePay.script = document.createElement('script');WePay.script.type = 'text/javascript';WePay.script.async = true;WePay.script.src = 'https://static.wepay.com/min/js/widgets.v2.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(WePay.script, s);} else if (WePay.load_widgets) {WePay.load_widgets();}</script>
         </p>
 
         <p>

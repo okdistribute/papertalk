@@ -15,6 +15,11 @@ html, body {
     min-height: 100%;
 }
 
+.login_button {
+    height: 40px;
+
+}
+
 #main {
     overflow:auto;
 	padding-bottom: 80px;
@@ -82,9 +87,12 @@ p {
     font-size: 26px;
 }
 
-.wepay-widget-button {
-    padding: 6px 12px !important;
-    color: black !important;
+.login_button {
+    padding: 0px !important;
+}
+
+.login_button > img {
+    height: 40px;
 }
 
 @media (max-width: 780px) {
