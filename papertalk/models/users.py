@@ -1,5 +1,6 @@
 from flask import g
 from flask_login import AnonymousUserMixin
+from bson import ObjectId
 
 class User(dict):
 
@@ -27,6 +28,7 @@ class MyAnonymousUser(AnonymousUserMixin, dict):
         self['_id'] = None
         self['username'] = None
 
+
 def update(user, *E, **doc):
     """
     Updates a user
@@ -44,6 +46,7 @@ def save(**doc):
     _id = g.db.users.insert(doc, safe=True)
     return _id
 
+
 def get(_id=None, username=None):
     """
     Gets a user by id
@@ -51,18 +54,21 @@ def get(_id=None, username=None):
     q = {}
 
     if _id:
-        q["_id"] = _id
+        q["_id"] = ObjectId(_id)
     elif username:
         q["username"] = username
     else:
         return None
 
-    return g.db.users.find_one(q, as_class=User)
+    user = g.db.users.find_one(q, as_class=User, safe=True)
+    return user
 
 def create(username, email, google_id, token, **doc):
     """
     Creates a new user
     """
+    print "creating user"
+
     doc.update({'username': username,
                 '_username': username.lower(),
                 'email': email,
@@ -72,7 +78,8 @@ def create(username, email, google_id, token, **doc):
                })
 
     _id = g.db.users.insert(doc, safe=True)
-    user = User({"_id": _id})
+    doc.update({'_id': _id})
+    user = User(doc)
 
     return user
 

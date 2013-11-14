@@ -6,20 +6,15 @@ import os
 
 def init_login(app):
     login_manager = LoginManager()
+    login_manager.login_view = 'main.login'
     login_manager.anonymous_user = users.MyAnonymousUser
-    login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(_id):
-        return users.get(_id)
+        return users.get(_id=_id)
 
-    # Make current user available on templates
-    @app.context_processor
-    def inject_user():
-        try:
-            return {'current_user': g.user}
-        except AttributeError:
-            return {'current_user': None}
+    login_manager.init_app(app)
+
 
 def register_blueprints(app):
     from papertalk.views.reaction import reaction_blueprint
@@ -51,6 +46,17 @@ def make_app():
     @app.before_request
     def before_request():
         g.db = connect_db()
+
+    @app.context_processor
+    def inject_user():
+        try:
+            user = {'current_user': current_user}
+            print "found user ", current_user
+        except AttributeError:
+            user = {'current_user': None}
+            print "AttributeError"
+
+        return user
 
     init_login(app)
     register_blueprints(app)
