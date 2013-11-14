@@ -1,6 +1,8 @@
 from flask import render_template, request, Blueprint, redirect
+from flask_login import current_user
 from papertalk.models import reactions, articles
 from papertalk.forms import ReactionForm
+from papertalk.utils import disqus
 
 reaction_blueprint  = Blueprint("reaction", __name__)
 
@@ -10,6 +12,7 @@ def reaction(id):
     reaction = reactions.lookup(_id=id)
     context["reaction"] = reaction
     context["article"] = articles.lookup(_id=reaction['article_id'])
+    context["disqus_sso_script"] = disqus.get_sso_script(current_user)
     return render_template('reaction.html', **context)
 
 

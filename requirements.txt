@@ -4,6 +4,8 @@ Werkzeug==0.8.3
 gunicorn==0.17.2
 Flask-PyMongo
 Flask-Testing
+Flask-Security
+Flask-Social
 Flask-WTF
 BeautifulSoup
 pymongo
@@ -11,3 +13,6 @@ oauth
 requests
 httplib2
 disqus-python
+python-twitter
+oauth2client 
+google-api-python-client

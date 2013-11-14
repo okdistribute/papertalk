@@ -1,6 +1,20 @@
 from flask import Flask, url_for, g
 from papertalk import connect_db
+from papertalk.models import users
+from flask_login import LoginManager, current_user
 import os
+
+def init_login(app):
+    login_manager = LoginManager()
+    login_manager.login_view = 'main.login'
+    login_manager.anonymous_user = users.MyAnonymousUser
+
+    @login_manager.user_loader
+    def load_user(_id):
+        return users.get(_id=_id)
+
+    login_manager.init_app(app)
+
 
 def register_blueprints(app):
     from papertalk.views.reaction import reaction_blueprint
@@ -11,6 +25,7 @@ def register_blueprints(app):
     app.register_blueprint(main_blueprint)
     app.register_blueprint(reaction_blueprint)
 
+
 def make_app():
     app = Flask(__name__)
     try:
@@ -20,20 +35,31 @@ def make_app():
         for key, value in app.config.iteritems():
             app.config[key] = os.environ.get(key)
 
-    # Determines the destination of the build. Only usefull if you're using Frozen-Flask
-    app.config['FREEZER_DESTINATION'] = os.path.dirname(os.path.abspath(__file__))+'/../build'
+    app.secret_key = app.config['SECRET_KEY']
+
     # Function to easily find your assets
     # In your template use <link rel=stylesheet href="{{ static('filename') }}">
     app.jinja_env.globals['static'] = (
         lambda filename: url_for('static', filename = filename)
     )
-    register_blueprints(app)
 
     @app.before_request
     def before_request():
         g.db = connect_db()
 
-    app.config['DEBUG'] = True
+    @app.context_processor
+    def inject_user():
+        try:
+            user = {'current_user': current_user}
+            print "found user ", current_user
+        except AttributeError:
+            user = {'current_user': None}
+            print "AttributeError"
+
+        return user
+
+    init_login(app)
+    register_blueprints(app)
 
     return app
 

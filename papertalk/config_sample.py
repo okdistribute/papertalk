@@ -11,3 +11,5 @@ class Config(object):
     MONGO_PASSWORD='test'
     MENDELEY_KEY =  ''
     MENDELEY_SECRET = ''
+    DISQUS_SECRET = ''
+    DISQUS_PUBLIC = ''
