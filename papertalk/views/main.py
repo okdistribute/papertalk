@@ -39,11 +39,12 @@ def oauth_authorized(resp):
     req = urllib2.Request(url)  # must be GET
     data = json.loads(urllib2.urlopen(req).read())
 
-    email = data['email']
+    email = data.get('email', '')
+    username, domain = email.split('@')
 
-    user = users.get(username=email)
+    user = users.get(username=username)
     if not user:
-        user = users.create(email, email, data['id'], resp['id_token'])
+        user = users.create(username, email, data['id'], resp['id_token'])
 
     login_user(user)
 

@@ -6,13 +6,13 @@ from papertalk.utils import disqus
 
 reaction_blueprint  = Blueprint("reaction", __name__)
 
-@reaction_blueprint.route('/reaction/<id>', methods=["GET"])
-def reaction(id):
+@reaction_blueprint.route('/reaction/<_id>', methods=["GET"])
+def reaction(_id):
     context = {}
-    reaction = reactions.lookup(_id=id)
-    context["reaction"] = reaction
+    context["reaction"] = reactions.lookup(_id=_id)
     context["article"] = articles.lookup(_id=reaction['article_id'])
-    context["disqus_sso_script"] = disqus.get_sso_script(current_user)
+    context["disqus"] = disqus.get(current_user, context["article"], reaction=context["reaction"])
+
     return render_template('reaction.html', **context)
 
 

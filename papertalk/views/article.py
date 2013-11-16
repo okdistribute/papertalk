@@ -1,5 +1,7 @@
 from flask import render_template, request, Blueprint
+from flask_login import current_user
 from papertalk import utils
+from papertalk.utils import disqus
 from papertalk.models.sites import Scholar, Mendeley
 from papertalk.models import reactions, articles
 
@@ -10,6 +12,7 @@ def article(_id):
     context = {}
     context["article"] = articles.lookup(_id=_id)
     context["reactions"] = reactions.lookup(article_id=_id, mult=True)
+    context["disqus"] = disqus.get(current_user, context["article"])
 
     return render_template('article.html', **context)
 

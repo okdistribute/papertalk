@@ -5,13 +5,37 @@ import simplejson
 import time
 from flask import current_app
 
+class Disqus(object):
+    """
+    Handles the transfer of disqus information to the templates
+    """
+
+    def __init__(self, user, identifer, title):
+        self.sso_script = get_sso_script(user)
+        self.identifier = identifer
+        self.title = title
+
+def get(user, article, reaction=None):
+    """
+    Returns an object to be consumed by disqus comment js
+    Article is required.
+    """
+    title = "Comments for this "
+    if reaction:
+        identifier = "%s/%s" % (article["_id"], reaction["_id"])
+        title += "reaction:"
+    else:
+        identifier = article["_id"]
+        title += "article:"
+
+    return Disqus(user, identifier, title)
+
 def get_sso_script(user):
     # create a JSON packet of our data attributes
     data = simplejson.dumps({
-        'id': user['_id'],
-        'username': user['screen_name'],
-        'email': user.get('email', None),
-        'url': user.get('url', None)
+        'id': user['google_id'],
+        'username': user['username'],
+        'email': user['email']
     })
     # encode the data to base64
     message = base64.b64encode(data)
