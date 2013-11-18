@@ -4,6 +4,7 @@ from papertalk.models import users
 from flask_login import LoginManager, current_user
 import os
 from flask_sslify import SSLify
+from papertalk import init_google
 
 
 def init_login(app):
@@ -50,6 +51,7 @@ def make_app():
     @app.before_request
     def before_request():
         g.db = connect_db()
+        init_google()
 
     @app.context_processor
     def inject_user():
