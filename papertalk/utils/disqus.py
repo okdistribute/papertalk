@@ -33,9 +33,9 @@ def get(user, article, reaction=None):
 def get_sso_script(user):
     # create a JSON packet of our data attributes
     data = simplejson.dumps({
-        'id': user['google_id'],
-        'username': user['username'],
-        'email': user['email']
+        'id': user.get('google_id', None),
+        'username': user.get('username', None),
+        'email': user.get('email', None)
     })
     # encode the data to base64
     message = base64.b64encode(data)
