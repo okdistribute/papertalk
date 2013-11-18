@@ -21,8 +21,8 @@ class ReactionForm(Form):
     """
     Form that creates a reaction.
     """
-    title = TextField('title', [validators.DataRequired()])
-    body = TextField('body', [validators.DataRequired()])
+    title = TextField('title', [validators.Required()])
+    body = TextField('body', [validators.Required()])
 
 class ArticleForm(Form):
     """

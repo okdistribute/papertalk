@@ -16,7 +16,7 @@ def reaction(_id):
     return render_template('reaction.html', **context)
 
 
-@reaction_blueprint.route('/article/<article_id>/reaction/new', methods=["GET", "POST"])
+@reaction_blueprint.route('/article/<article_id>/reaction', methods=["GET", "POST"])
 def reaction_author(article_id):
     form = ReactionForm(request.form)
 
