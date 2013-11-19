@@ -3,15 +3,19 @@ from pymongo import MongoClient
 from flask import current_app, session
 from papertalk.config import Config
 from flask_oauth import OAuth
-from flask_login import current_user
 
 def connect_db():
     c = current_app.config
-    MONGO_URL= "mongodb://%s:%s@%s:%s/%s" % (c['MONGO_USERNAME'],
-                                            urllib.quote(c['MONGO_PASSWORD']),
-                                            c['MONGO_HOST'],
+    if 'MONGO_USERNAME' not in c:
+        MONGO_URL = "mongodb://%s:%s/%s" % (c['MONGO_HOST'],
                                             c['MONGO_PORT'],
                                             c['MONGO_DBNAME'])
+    else:
+        MONGO_URL= "mongodb://%s:%s@%s:%s/%s" % (c['MONGO_USERNAME'],
+                                                urllib.quote(c['MONGO_PASSWORD']),
+                                                c['MONGO_HOST'],
+                                                c['MONGO_PORT'],
+                                                c['MONGO_DBNAME'])
 
     conn = MongoClient(host=MONGO_URL,
                        tz_aware=True)
