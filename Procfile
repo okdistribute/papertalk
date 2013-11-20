@@ -1,1 +1,1 @@
-web: gunicorn papertalk.wsgi:app
+web: gunicorn --debug papertalk.wsgi:app
