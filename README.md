@@ -10,7 +10,7 @@ Papertalk is the place to go to discuss, criticize, and learn about academic res
 
 ## setup
 ```
-$ python setup.py develop
+$ pip install -r requirements.txt
 $ bower install
 $ npm install
 ```
