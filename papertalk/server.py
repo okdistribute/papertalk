@@ -114,7 +114,6 @@ def make_app():
     @app.before_request
     def before_request():
         g.db = connect_db()
-        init_google()
 
     @app.context_processor
     def inject_user():
