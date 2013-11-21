@@ -1,1 +1,1 @@
-web: gunicorn --debug papertalk.wsgi:app
+web: bin/web

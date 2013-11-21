@@ -103,6 +103,7 @@ def make_app():
             app.config[key] = os.environ.get(key)
 
     app.secret_key = app.config['SECRET_KEY']
+    app.config['DEBUG'] = os.environ.get('DEBUG', True)
 
 
     # Function to easily find your assets
