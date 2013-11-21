@@ -25,3 +25,4 @@ module.exports = (grunt) ->
   grunt.registerTask "build", ["coffee"]
   grunt.registerTask "deploy", ["copy", "build", "clean"]
   grunt.registerTask 'heroku:production', 'build'
+  grunt.registerTask 'heroku:development', 'build'
