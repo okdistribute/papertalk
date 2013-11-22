@@ -67,8 +67,6 @@ def create(username, email, google_id, token, **doc):
     """
     Creates a new user
     """
-    print "creating user"
-
     doc.update({'username': username,
                 '_username': username.lower(),
                 'email': email,

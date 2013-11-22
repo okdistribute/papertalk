@@ -1,11 +1,11 @@
 from flask import Flask, render_template, Blueprint, url_for, g, flash, request, redirect, session
+from urllib2 import URLError
 from papertalk import connect_db
 from papertalk.models import users
 from flask_login import LoginManager, session, current_user, login_user
 import os
 from flask_sslify import SSLify
 from flask_oauth import OAuth
-from papertalk.models import users
 import json
 import urllib2, urllib
 
@@ -46,7 +46,7 @@ def init_login(app):
         access_token = resp['access_token']
         session['access_token'] = access_token, ''
 
-        next_url = request.args.get('next') or '/'
+        next_url = request.referrer or request.args.get('next') or '/'
         if resp is None:
             return redirect(next_url)
 
@@ -58,7 +58,14 @@ def init_login(app):
         url = 'https://www.googleapis.com/oauth2/v1/userinfo?' + payload
 
         req = urllib2.Request(url)  # must be GET
-        data = json.loads(urllib2.urlopen(req).read())
+        try:
+            res = urllib2.urlopen(req)
+            data = json.loads(res.read())
+        except URLError, e:
+            if e.code == 401:
+                # Unauthorized - bad token
+                session.pop('access_token', None)
+                return redirect(url_for('login'))
 
         email = data.get('email', '')
         username, domain = email.split('@')
@@ -69,7 +76,6 @@ def init_login(app):
 
         login_user(user)
 
-        flash('You were signed in as %s' % user['username'])
         return redirect(next_url)
 
     @login_blueprint.route('/login')
