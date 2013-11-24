@@ -1,1 +1,2 @@
-web: gunicorn papertalk.wsgi:app
+web: bin/web
+development: bin/web

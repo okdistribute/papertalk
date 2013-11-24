@@ -1,14 +1,19 @@
 import urllib
 from pymongo import MongoClient
-from flask import current_app
+from flask import current_app, session
 
 def connect_db():
     c = current_app.config
-    MONGO_URL= "mongodb://%s:%s@%s:%s/%s" % (c['MONGO_USERNAME'],
-                                            urllib.quote(c['MONGO_PASSWORD']),
-                                            c['MONGO_HOST'],
+    if 'MONGO_USERNAME' not in c:
+        MONGO_URL = "mongodb://%s:%s/%s" % (c['MONGO_HOST'],
                                             c['MONGO_PORT'],
                                             c['MONGO_DBNAME'])
+    else:
+        MONGO_URL= "mongodb://%s:%s@%s:%s/%s" % (c['MONGO_USERNAME'],
+                                                urllib.quote(c['MONGO_PASSWORD']),
+                                                c['MONGO_HOST'],
+                                                c['MONGO_PORT'],
+                                                c['MONGO_DBNAME'])
 
     conn = MongoClient(host=MONGO_URL,
                        tz_aware=True)

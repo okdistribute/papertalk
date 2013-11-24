@@ -77,7 +77,7 @@ def get_or_insert(articles):
             res[_id] = our_article
         else:
             _id = save(**a)
-            res[_id] = a
+            res[_id] = lookup(_id=_id)
 
     return res.values()
 
