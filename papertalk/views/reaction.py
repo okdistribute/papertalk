@@ -10,7 +10,7 @@ reaction_blueprint  = Blueprint("reaction", __name__)
 def reaction(_id):
     context = {}
     context["reaction"] = reactions.lookup(_id=_id)
-    context["article"] = articles.lookup(_id=reaction['article_id'])
+    context["article"] = articles.lookup(_id=context["reaction"]['article_id'])
     context["disqus"] = disqus.get(current_user, context["article"], reaction=context["reaction"])
 
     return render_template('reaction.html', **context)
