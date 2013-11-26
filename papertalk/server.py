@@ -1,13 +1,10 @@
-from flask import Flask, render_template, Blueprint, url_for, g, flash, request, redirect, session
-from urllib2 import URLError
+from flask import Flask, Blueprint, url_for, g, flash, request, redirect
 from papertalk import connect_db
 from papertalk.models import users
-from flask_login import LoginManager, session, current_user, login_user
+from flask_login import LoginManager, current_user, login_user
 import os
 from flask_sslify import SSLify
 from flask_oauth import OAuth
-import json
-import urllib2, urllib
 
 
 def init_login(app):
@@ -20,72 +17,65 @@ def init_login(app):
         return users.get(_id=_id)
 
     login_manager.init_app(app)
+    login_blueprint = Blueprint("login", __name__)
 
     oauth = OAuth()
-    google = oauth.remote_app('google',
-                              base_url='https://www.google.com/accounts/',
-                              authorize_url='https://accounts.google.com/o/oauth2/auth',
-                              request_token_url=None,
-                              request_token_params={'scope': 'openid email',
-                                                    'response_type': 'code'},
-                              access_token_url='https://accounts.google.com/o/oauth2/token',
-                              access_token_method='POST',
-                              access_token_params={'grant_type': 'authorization_code'},
-                              consumer_key=app.config['GOOGLE_KEY'],
-                              consumer_secret=app.config['GOOGLE_SECRET']
+    twitter = oauth.remote_app('twitter',
+                               base_url='https://api.twitter.com/1.1/',
+                               request_token_url='https://api.twitter.com/oauth/request_token',
+                               access_token_url='https://api.twitter.com/oauth/access_token',
+                               authorize_url='https://api.twitter.com/oauth/authenticate',
+                               consumer_key=app.config['TWITTER_KEY'],
+                               consumer_secret=app.config['TWITTER_SECRET']
     )
 
-    @google.tokengetter
-    def get_access_token():
-        return session.get('access_token')
 
-    login_blueprint = Blueprint("login", __name__)
+    @twitter.tokengetter
+    def get_access_token(token=None):
+        if current_user.is_authenticated():
+            token = current_user['token']
+            return (token['oauth_token'], token['oauth_token_secret'])
+        else:
+            return None
+
+
     @login_blueprint.route('/oauth-authorized')
-    @google.authorized_handler
+    @twitter.authorized_handler
     def oauth_authorized(resp):
-        access_token = resp['access_token']
-        session['access_token'] = access_token, ''
-
-        next_url = request.referrer or request.args.get('next') or '/'
+        next_url = request.args.get('next') or '/'
         if resp is None:
+            flash(u'You denied the request to sign in.')
             return redirect(next_url)
 
-        ## get user data
-        params = {
-            'access_token': resp['access_token'],
-            }
-        payload = urllib.urlencode(params)
-        url = 'https://www.googleapis.com/oauth2/v1/userinfo?' + payload
+        token = (
+            resp['oauth_token'],
+            resp['oauth_token_secret']
+        )
 
-        req = urllib2.Request(url)  # must be GET
-        try:
-            res = urllib2.urlopen(req)
-            data = json.loads(res.read())
-        except URLError, e:
-            if e.code == 401:
-                # Unauthorized - bad token
-                session.pop('access_token', None)
-                return redirect(url_for('login'))
-
-        email = data.get('email', '')
-        username, domain = email.split('@')
+        username = resp['screen_name']
+        email = username + "@papertalk.org"
 
         user = users.get(username=username)
         if not user:
-            user = users.create(username, email, data['id'], resp['id_token'])
+            user = users.create(username, email, token)
 
         login_user(user)
+        print user
 
         return redirect(next_url)
+
 
     @login_blueprint.route('/login')
     def login():
         if current_user.is_authenticated():
             return redirect('/')
-        callback=url_for('.oauth_authorized', _external=True)
-        return google.authorize(callback=callback)
+
+        callback_url = url_for('.oauth_authorized', next=request.args.get('next'))
+        print callback_url
+        return twitter.authorize(callback=callback_url or request.referrer or None)
 
     app.register_blueprint(login_blueprint)
+
 
 def register_blueprints(app):
     from papertalk.views.reaction import reaction_blueprint

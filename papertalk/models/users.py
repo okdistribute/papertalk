@@ -63,14 +63,13 @@ def get(_id=None, username=None):
     user = g.db.users.find_one(q, as_class=User, safe=True)
     return user
 
-def create(username, email, google_id, token, **doc):
+def create(username, email, token, **doc):
     """
     Creates a new user
     """
     doc.update({'username': username,
                 '_username': username.lower(),
                 'email': email,
-                'google_id': google_id,
                 'token': token,
                 'is_active':True
                })
