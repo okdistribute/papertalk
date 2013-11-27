@@ -1,9 +1,9 @@
-from flask import Flask, Blueprint, url_for, g, flash, request, redirect
+from flask import Flask, Blueprint, url_for, g, flash, request, redirect, session
 from papertalk import connect_db
 from papertalk.models import users
 from flask_login import LoginManager, current_user, login_user
 import os
-from flask_oauth import OAuth
+from flask_oauthlib.client import OAuth
 
 
 def init_login(app):
@@ -18,7 +18,7 @@ def init_login(app):
     login_manager.init_app(app)
     login_blueprint = Blueprint("login", __name__)
 
-    oauth = OAuth()
+    oauth = OAuth(app)
     twitter = oauth.remote_app('twitter',
                                base_url='https://api.twitter.com/1.1/',
                                request_token_url='https://api.twitter.com/oauth/request_token',
@@ -31,11 +31,15 @@ def init_login(app):
 
     @twitter.tokengetter
     def get_access_token(token=None):
-        if current_user.is_authenticated():
-            token = current_user['token']
-            return (token['oauth_token'], token['oauth_token_secret'])
-        else:
-            return None
+        if 'twitter_oauth' in session:
+            resp = session['twitter_oauth']
+            return resp['oauth_token'], resp['oauth_token_secret']
+
+        #if current_user.is_authenticated():
+        #    token = current_user['token']
+        #    return token['oauth_token'], token['oauth_token_secret']
+        #else:
+        #    return None
 
 
     @login_blueprint.route('/oauth-authorized')
@@ -46,11 +50,11 @@ def init_login(app):
             flash(u'You denied the request to sign in.')
             return redirect(next_url)
 
+        session['twitter_oauth'] = resp
         token = (
             resp['oauth_token'],
             resp['oauth_token_secret']
         )
-
         username = resp['screen_name']
         email = username + "@papertalk.org"
 
@@ -68,8 +72,8 @@ def init_login(app):
             return redirect('/')
 
         callback_url = url_for('.oauth_authorized', next=request.args.get('next'), _external=True)
-        callback_url = callback_url.replace("http://", "https://")
-        callback_url += '/'
+
+        #callback_url = callback_url.replace("http://", "https://")
         print callback_url
 
         return twitter.authorize(callback=callback_url or request.referrer or None)
