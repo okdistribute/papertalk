@@ -3,7 +3,6 @@ from papertalk import connect_db
 from papertalk.models import users
 from flask_login import LoginManager, current_user, login_user
 import os
-from flask_sslify import SSLify
 from flask_oauth import OAuth
 
 
@@ -89,7 +88,6 @@ def register_blueprints(app):
 
 def make_app():
     app = Flask(__name__)
-    SSLify(app)
 
     try:
         app.config.from_object('papertalk.config')
