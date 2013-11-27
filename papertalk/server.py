@@ -73,7 +73,7 @@ def init_login(app):
 
         callback_url = url_for('.oauth_authorized', next=request.args.get('next'), _external=True)
 
-        #callback_url = callback_url.replace("http://", "https://")
+        callback_url = callback_url.replace("http://", "https://")
         print callback_url
 
         return twitter.authorize(callback=callback_url or request.referrer or None)
