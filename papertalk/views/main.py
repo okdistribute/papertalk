@@ -23,5 +23,6 @@ def settings():
 @main_blueprint.route("/logout")
 @login_required
 def logout():
+    session.pop('twitter_oauth', None)
     logout_user()
     return redirect('/')

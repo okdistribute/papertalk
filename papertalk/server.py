@@ -2,6 +2,8 @@ from flask import Flask, Blueprint, url_for, g, flash, request, redirect, sessio
 from papertalk import connect_db
 from papertalk.models import users
 from flask_login import LoginManager, current_user, login_user
+from flask_sslify import SSLify
+from utils.RedisSession import RedisSessionInterface
 import os
 from flask_oauthlib.client import OAuth
 
@@ -18,28 +20,24 @@ def init_login(app):
     login_manager.init_app(app)
     login_blueprint = Blueprint("login", __name__)
 
-    oauth = OAuth(app)
+    oauth = OAuth()
     twitter = oauth.remote_app('twitter',
                                base_url='https://api.twitter.com/1.1/',
                                request_token_url='https://api.twitter.com/oauth/request_token',
                                access_token_url='https://api.twitter.com/oauth/access_token',
                                authorize_url='https://api.twitter.com/oauth/authenticate',
-                               consumer_key=app.config['TWITTER_KEY'],
-                               consumer_secret=app.config['TWITTER_SECRET']
+                               app_key='TWITTER'
     )
+    oauth.init_app(app)
 
 
     @twitter.tokengetter
     def get_access_token(token=None):
-        if 'twitter_oauth' in session:
-            resp = session['twitter_oauth']
-            return resp['oauth_token'], resp['oauth_token_secret']
-
-        #if current_user.is_authenticated():
-        #    token = current_user['token']
-        #    return token['oauth_token'], token['oauth_token_secret']
-        #else:
-        #    return None
+        if current_user.is_authenticated():
+            token = current_user['token']
+            return token['oauth_token'], token['oauth_token_secret']
+        else:
+            return None
 
 
     @login_blueprint.route('/oauth-authorized')
@@ -50,7 +48,6 @@ def init_login(app):
             flash(u'You denied the request to sign in.')
             return redirect(next_url)
 
-        session['twitter_oauth'] = resp
         token = (
             resp['oauth_token'],
             resp['oauth_token_secret']
@@ -71,10 +68,10 @@ def init_login(app):
         if current_user.is_authenticated():
             return redirect('/')
 
-        callback_url = url_for('.oauth_authorized', next=request.args.get('next'), _external=True)
+        callback_url = url_for('.oauth_authorized', next=request.args.get('next'))
 
-        callback_url = callback_url.replace("http://", "https://")
-        print callback_url
+        #callback_url = callback_url.replace("http://", "https://")
+        #print callback_url
 
         return twitter.authorize(callback=callback_url or request.referrer or None)
 
@@ -93,6 +90,7 @@ def register_blueprints(app):
 
 def make_app():
     app = Flask(__name__)
+    SSLify(app)
 
     try:
         app.config.from_object('papertalk.config')
@@ -111,9 +109,24 @@ def make_app():
         lambda filename: url_for('static', filename = filename)
     )
 
+    redis_url = os.getenv('REDISTOGO_URL', False)
+    if redis_url:
+        import redis
+        app.session_interface = RedisSessionInterface(redis = redis.from_url(redis_url))
+
     @app.before_request
     def before_request():
         g.db = connect_db()
+
+    @app.after_request
+    def add_header(response):
+        """
+        Add headers to both force latest IE rendering engine or Chrome Frame,
+        and also to cache the rendered page for 10 minutes.
+        """
+        response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+        response.headers['Cache-Control'] = 'public, max-age=600'
+        return response
 
     @app.context_processor
     def inject_user():
