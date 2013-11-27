@@ -59,18 +59,19 @@ def init_login(app):
             user = users.create(username, email, token)
 
         login_user(user)
-        print user
 
         return redirect(next_url)
-
 
     @login_blueprint.route('/login')
     def login():
         if current_user.is_authenticated():
             return redirect('/')
 
-        callback_url = url_for('.oauth_authorized', next=request.args.get('next'))
+        callback_url = url_for('.oauth_authorized', next=request.args.get('next'), _external=True)
+        callback_url = callback_url.replace("http://", "https://")
+        callback_url += '/'
         print callback_url
+
         return twitter.authorize(callback=callback_url or request.referrer or None)
 
     app.register_blueprint(login_blueprint)
