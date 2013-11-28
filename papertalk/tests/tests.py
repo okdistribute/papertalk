@@ -1,8 +1,8 @@
 __author__ = 'karissamckelvey'
 import unittest
 import json
-from models.sites import Scholar, Mendeley
-from tests import PapertalkTestCase
+from papertalk.models.sites import Scholar, Mendeley
+from papertalk.tests import PapertalkTestCase
 
 class TestArticle(PapertalkTestCase):
 
@@ -23,10 +23,11 @@ class TestArticle(PapertalkTestCase):
         text = "visualizing communication on social media: making big data accessible"
         articles = Mendeley.search(text)
         self.assertGreater(len(articles), 0)
-        article = articles[0]
-        self.assertEqual(article["title"], "Visualizing Communication on Social Media: Making Big Data Accessible")
-        self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
-        self.assertEqual(article["year"], 2012)
+        for article in articles:
+            if article['title'] == "Visualizing Communication on Social Media: Making Big Data Accessible":
+                self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
+                self.assertEqual(article["year"], 2012)
+
 
     def testSaveArticle(self):
         """
@@ -45,11 +46,12 @@ class TestArticle(PapertalkTestCase):
         View the article
         """
         article = self.get_article()
+        print article
 
-        res = self.client.get("/article/%s" % article["_id"])
+        res = self.client.get("/article/view/%s" % article["_id"])
         self.assert200(res)
 
-        res = self.client.get("/article/notaproperid")
+        res = self.client.get("/article/view/notaproperid")
         self.assert400(res)
 
 class TestReaction(PapertalkTestCase):

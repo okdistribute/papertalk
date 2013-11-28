@@ -31,4 +31,5 @@ class ArticleForm(Form):
     title = TextField('title', [validators.DataRequired()])
     authors = TextField('authors', [validators.DataRequired()])
     year = TextField('year', [validators.DataRequired()])
+    url = TextField('url', [validators.DataRequired()])
 

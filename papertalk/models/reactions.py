@@ -21,7 +21,7 @@ def update(_id, *E, **doc):
 
 def save(title=None, body=None, article_id=None, **doc):
     """
-    Called to save or update the reaction.
+    Called to save the reaction.
     """
     doc.update({"title": title,
                 "body": body,
