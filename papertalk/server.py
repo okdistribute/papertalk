@@ -5,6 +5,7 @@ from flask_login import LoginManager, current_user, login_user
 from flask_sslify import SSLify
 import os
 from flask_oauthlib.client import OAuth
+from raven.contrib.flask import Sentry
 
 
 def init_login(app):
@@ -103,6 +104,7 @@ def make_app():
     app.secret_key = app.config['SECRET_KEY']
     #app.config['DEBUG'] = os.environ.get('DEBUG', True)
     app.session_cookie_name = "session"
+    sentry = Sentry(app)
 
 
     # Function to easily find your assets
