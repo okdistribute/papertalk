@@ -3,7 +3,6 @@ from papertalk import connect_db
 from papertalk.models import users
 from flask_login import LoginManager, current_user, login_user
 from flask_sslify import SSLify
-from utils.RedisSession import RedisSessionInterface
 import os
 from flask_oauthlib.client import OAuth
 
@@ -95,12 +94,16 @@ def make_app():
     try:
         app.config.from_object('papertalk.config')
     except:
+        app.config['SERVER_NAME'] = 'papertalk.herokuapp.com'
+        app.config['SESSION_COOKIE_DOMAIN'] = 'papertalk.herokuapp.com'
         app.config.from_object('papertalk.config_sample')
         for key, value in app.config.iteritems():
             app.config[key] = os.environ.get(key)
 
     app.secret_key = app.config['SECRET_KEY']
     app.config['DEBUG'] = os.environ.get('DEBUG', True)
+    app.session_cookie_name = "session"
+    print app.session_cookie_name
 
 
     # Function to easily find your assets
@@ -109,23 +112,17 @@ def make_app():
         lambda filename: url_for('static', filename = filename)
     )
 
-    redis_url = os.getenv('REDISTOGO_URL', False)
-    if redis_url:
-        import redis
-        app.session_interface = RedisSessionInterface(redis = redis.from_url(redis_url))
-
     @app.before_request
     def before_request():
         g.db = connect_db()
 
+
     @app.after_request
     def add_header(response):
         """
-        Add headers to both force latest IE rendering engine or Chrome Frame,
-        and also to cache the rendered page for 10 minutes.
+        Add headers to both force latest IE rendering engine or Chrome Frame
         """
         response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-        response.headers['Cache-Control'] = 'public, max-age=600'
         return response
 
     @app.context_processor
