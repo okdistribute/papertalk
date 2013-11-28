@@ -24,9 +24,9 @@
           <li><a href="#">{{current_user['username']}}</a></li>
           <li><a href="/logout">Logout</a></li>
           {% else %}
-          <li><a href="/login" class="login_button">
+          <li><a href="/login" style="padding-top: 10px;padding-bottom: 10px;">
               <!--<img src="{{static('img/google_signin.png')}}" />-->
-              Login
+              <img src="{{static('img/twitter_signin_base.png')}}" />
               </a>
           </li>
           {% endif %}
