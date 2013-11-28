@@ -136,3 +136,17 @@ class SSRN(Site):
     @classmethod
     def search(cls, text=None, title=None, author=None, year=None, items=10):
         pass
+
+class Arxiv(Site):
+
+    @classmethod
+    def _scrape(cls, soup):
+        ##TODO
+        pass
+
+class PDF(Site):
+
+    @classmethod
+    def scrape(cls, url):
+
+        return ''
