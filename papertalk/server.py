@@ -103,7 +103,6 @@ def make_app():
     app.secret_key = app.config['SECRET_KEY']
     app.config['DEBUG'] = os.environ.get('DEBUG', True)
     app.session_cookie_name = "session"
-    print app.session_cookie_name
 
 
     # Function to easily find your assets
