@@ -101,7 +101,7 @@ def make_app():
             app.config[key] = os.environ.get(key)
 
     app.secret_key = app.config['SECRET_KEY']
-    app.config['DEBUG'] = os.environ.get('DEBUG', True)
+    #app.config['DEBUG'] = os.environ.get('DEBUG', True)
     app.session_cookie_name = "session"
 
 
@@ -137,6 +137,21 @@ def make_app():
 
     register_blueprints(app)
     init_login(app)
+
+    if not app.debug:
+        import logging
+        from logging.handlers import SMTPHandler
+        from logging import FileHandler
+        mail_handler = SMTPHandler('127.0.0.1',
+                                   'server-error@papertalk.org',
+                                   ['support@papertalk.org'],
+                                   'Papertalk error')
+        mail_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(mail_handler)
+
+        file_handler = FileHandler('/tmp/papertalk.log')
+        file_handler.setLevel(logging.WARNING)
+        app.logger.addHandler(file_handler)
 
     return app
 
