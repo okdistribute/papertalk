@@ -5,6 +5,7 @@ from papertalk.utils import scholar
 from papertalk.utils.mendeley import mendeley_client as mc
 import re
 
+
 class Site(object):
     """
     Scrapes the site and returns an article
@@ -29,6 +30,8 @@ class Site(object):
         Retrieve a list of articles from search text, title, author, and/or year
         """
         pass
+
+
 
 class Scholar(Site):
 

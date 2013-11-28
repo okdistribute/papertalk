@@ -36,10 +36,7 @@ class TestArticle(PapertalkTestCase):
         text = "visualizing communication on social media: making big data accessible"
         res = self.client.get("/article/search?query=%s" % text)
         self.assert200(res)
-        self.assertIn('visualizing', res.data)
-
-        article = self.get_article()
-        self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
+        self.assertIn('visualizing communication', res.data)
 
     def testViewArticle(self):
         """
@@ -51,9 +48,6 @@ class TestArticle(PapertalkTestCase):
         res = self.client.get("/article/view/%s" % article["_id"])
         self.assert200(res)
 
-        res = self.client.get("/article/view/notaproperid")
-        self.assert400(res)
-
 class TestReaction(PapertalkTestCase):
 
     def testReactionSave(self):
@@ -61,12 +55,20 @@ class TestReaction(PapertalkTestCase):
         Should be able to create a reaction
         """
         article = self.get_article()
-        res = self.client.post("/reaction/new", data=dict(
-          title="this is a reaction title",
-          article_id=article["_id"],
-          text="reaction text here"
-        ))
+
+        res = self.client.get("/article/view/%s" % article["_id"])
         self.assert200(res)
+
+        token = self.csrf_token(res)
+
+        res = self.client.post("/article/%s/reaction" % article["_id"],
+                data=dict(
+                  csrf_token=token,
+                  title="this is a reaction title",
+                  text="reaction text here"
+                ))
+        self.assert200(res)
+
 
         res = self.client.get('/reaction/%s' % json.loads(res.data)["id"])
         self.assert200(res)
