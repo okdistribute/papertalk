@@ -128,10 +128,8 @@ def make_app():
     def inject_user():
         try:
             user = {'current_user': current_user}
-            print "found user ", current_user
         except AttributeError:
             user = {'current_user': None}
-            print "AttributeError"
 
         return user
 
