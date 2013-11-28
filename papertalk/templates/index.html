@@ -26,11 +26,17 @@
                     </div>
                 </form>
             <div id="status"></div>
+            <div id="papersites" class="panel-body">
+                <p class="muted"> or a link to an article on the web</p>
+                 <img src="/static/img/logo-mendeley.png" class="faded" id="mendeley"/>
+                 <!--<img src="/static/img/ssrn-logo.png" class="faded" id="ssrn"/>-->
+                 <img src="/static/img/pdf.png" class="faded" id="pdf"/>
+            </div>
         </div>
     </div>
 </div>
 
 
-<script src="{{ static('/js/site.js')}} " type="text/javascript"></script>
-<script src="{{ static('/js/main.js')}}" type="text/javascript"></script>
+<script src="{{ static('js/site.js')}} " type="text/javascript"></script>
+<script src="{{ static('js/main.js')}}" type="text/javascript"></script>
 {% endblock %}
