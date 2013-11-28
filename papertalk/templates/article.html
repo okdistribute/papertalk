@@ -1,23 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<span class="article-title"><a href="{{article.url}}">{{article.title}}</a></span>
-
-<div class="authors">
+<div class="col-md-8">
+<h1 class="article-title">{{article.title}} 
+	<span class="year">{{article.year}}</span>
+</h1>
+<h4>
 	{% for a in article.authors %} 
-		<span class="author">{{a}}</span>
+    {{a}}
 		{% if not loop.last %}, {% endif %}
 	{% endfor %}
-	<span class="year">{{article.year}}</span>
-</div>
-
-<div>
-    <h2>Reactions</h2>
-    <a class="btn btn-primary btn-large" 
-        type="button" 
-        id="reactionNew" 
-        href="/article/{{article._id}}/reaction">New Reaction
-    </a>
+</h4>
+<a href="{{article.url}}">URL</a>
+<hr>
 
     <ul>
         {% for reaction in reactions %}
@@ -29,9 +24,32 @@
         {% endfor %}
     </ul>
 </div>
+<div class="col-md-4">
+    <a class="btn btn-primary btn-large" 
+        type="button" 
+        id="reactionNew" 
+        href="/article/{{article._id}}/reaction">New Reaction
+    </a>
+    <br>
+    <a class="btn btn-primary btn-large"
+        type="button"
+        id="declareAuthor"
+        href="/article/{{article._id}}/author">I am an author
+    </a>
+    <br>
+    <a class="btn btn-primary btn-large"
+        type="button"
+        id="reportDuplicate"
+        href="/article/{{article._id}}/duplicate">Report Duplicate
+    </a>
+    <hr>
+<!--
+<div class="col-md-6">
+    {% include "_disqus.html" %}
+</div>
+-->
 
-{% include "_disqus.html" %}
-
+</div>
 <script src="{{url_for('static', filename='js/article.js')}}"></script>
 {% endblock %}
 
