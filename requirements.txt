@@ -17,3 +17,5 @@ disqus-python
 google-api-python-client
 gevent
 redis
+raven>=3
+blinker
