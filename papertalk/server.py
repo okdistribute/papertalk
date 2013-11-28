@@ -94,8 +94,8 @@ def make_app():
     try:
         app.config.from_object('papertalk.config')
     except:
-        app.config['SERVER_NAME'] = 'papertalk.herokuapp.com'
-        app.config['SESSION_COOKIE_DOMAIN'] = 'papertalk.herokuapp.com'
+        app.config['SERVER_NAME'] = 'papertalk.org'
+        app.config['SESSION_COOKIE_DOMAIN'] = 'papertalk.org'
         app.config.from_object('papertalk.config_sample')
         for key, value in app.config.iteritems():
             app.config[key] = os.environ.get(key)
