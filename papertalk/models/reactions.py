@@ -19,12 +19,13 @@ def update(_id, *E, **doc):
                                     safe=True)
 
 
-def save(title=None, body=None, article_id=None, **doc):
+def save(title=None, body=None, article_id=None, username=None, **doc):
     """
     Called to save the reaction.
     """
     doc.update({"title": title,
                 "body": body,
+                "username": username,
                 "article_id": ObjectId(article_id)})
 
     _id = g.db.reactions.insert(doc, safe=True)
