@@ -59,8 +59,9 @@ def url():
     else:
         article = {"url": url}
 
-    c = {}
     form = ArticleForm(request.form)
+
+    c = {}
     c['form'] = form
     c.update(article)
 

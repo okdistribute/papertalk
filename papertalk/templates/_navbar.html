@@ -12,16 +12,15 @@
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <form class="navbar-form navbar-left" action="/article/search" role="search">
+    <form id="articleForm" method="GET" class="navbar-form navbar-left" action="" role="search">
       <div class="form-group">
-        <input type="text" class="input-xlarge form-control" name="query" placeholder="e.g. 'collective dynamics watts'">
+        <input type="text" class="input-xlarge form-control" id="articleInput"  name="query" placeholder="e.g. 'collective dynamics watts'">
       </div>
-      <button type="submit" class="btn btn-default">search</button>
+      <button type="submit" class="btn btn-default">papertalk</button>
     </form>
   <div class="navbar-right">
       <ul class="nav navbar-nav">
           {% if current_user.is_authenticated() %}
-          <li><a href="/article/new"><i class="glyphicon glyphicon-plus"></i> papertalk </a></li>
           <li><a href="#">{{current_user['username']}}</a></li>
           <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> </a></li>
           {% else %}

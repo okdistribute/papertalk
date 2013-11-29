@@ -128,6 +128,17 @@ class Mendeley(Site):
             docs = docs[1:]
         return cls._parse(docs)
 
+    @classmethod
+    def _scrape(cls, soup):
+        """
+        function to implement when extending module
+        """
+        pass
+
+    @classmethod
+    def scrape(cls, url):
+        ##TODO: actually scrape the url using the above _scrape method
+        return {"url": url}
 
 class SSRN(Site):
 
