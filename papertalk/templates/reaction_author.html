@@ -13,25 +13,52 @@
 {% endif %}
 
 <div>
-<h1>Write a reaction</h1>
 <form class="form-horizontal" method="POST" role="form">
     {{ui.render_field(form.csrf_token)}}
     <div id="wmd-button-bar" style="display:none"></div>
     <div class="control-group">
         <input name="title"
                type="text"
-               class="form-control"
+               class="form-control input-lg"
                id="reaction-title"
                placeholder="Reaction Title" />
     </div>
     <div class="input-group" style="min-height: 20px;"></div>
-    <div class="row">
-        <div class="col-lg-6">
-            <textarea id="wmd-input" name="body" class="form-control" style="min-height: 400px; max-height: 400px;">
-Your reaction
-</textarea>
+    <div class="control-group">
+<!--       <div class="form-group">
+        <label for="reactionPurpose" class="col-sm-3 control-label">The main purpose of this reaction is to</label>
+        <div class="col-sm-5">
+          <select id="reactionPurpose" class="form-control input-sm">
+            <option>choose...</option>
+            <option>share perspective, opinion, or experience</option>
+            <option>ask a question about the paper</option>
+            <option>provide context or explain impact/importance</option>
+            <option>raise an issue or potential problem/weakness</option>
+            <option>other</option>
+          </select>
         </div>
-        <div id="wmd-preview" class="col-lg-6"></div>
+        <div class="checkbox col-sm-3">
+          <label><input type="checkbox">I am an author of this paper</label>
+        </div>
+      </div>
+ -->    </div>
+    <div class="input-group" style="min-height: 10px;"></div>
+    <div id="tabs" class="arow">
+        <ul>
+          <li><a href="#tabs-1">Write</a></li>
+          <li><a href="#tabs-2">Preview</a></li>
+        </ul>
+        <div id="tabs-1">
+          <div style="min-height: 400px; max-height: 400px;">
+            <textarea id="wmd-input" name="body" class="form-control" style="min-height: 400px; max-height: 400px; resize: none;">
+Your reaction
+  </textarea>
+          <p class="text-muted"><small>You can use markdown to structure your reaction</small></p>
+          </div>
+        </div>
+        <div id="tabs-2">
+          <div id="wmd-preview" style="min-height: 400px; max-height: 400px;"></div>
+        </div>
     </div>
     <div class="input-group" style="min-height: 20px;"></div>
     <div class="row pull-right">
@@ -48,5 +75,10 @@ Your reaction
 <script src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Editor.min.js"></script>
 <script src="{{url_for('static', filename='js/reaction_author.js')}}"></script>
+<script>
+$(function() {
+    $( "#tabs" ).tabs();
+});
+</script>
 {% endblock %}
 
