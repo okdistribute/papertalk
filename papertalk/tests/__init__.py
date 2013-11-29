@@ -1,5 +1,5 @@
 __author__ = 'karissamckelvey'
-from server import make_app
+from papertalk.server import make_app
 from flask.ext.testing import TestCase
 import json
 

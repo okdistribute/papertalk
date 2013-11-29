@@ -4,7 +4,7 @@ Werkzeug==0.8.3
 gunicorn==0.17.2
 Flask-PyMongo
 Flask-Testing
-Flask-Security
+Flask-OAuthlib==0.4.1
 Flask-Social
 Flask-WTF
 Flask-SSLify
@@ -14,6 +14,8 @@ oauth
 requests
 httplib2
 disqus-python
-python-twitter
-oauth2client 
 google-api-python-client
+gevent
+redis
+raven>=3
+blinker

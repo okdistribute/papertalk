@@ -5,6 +5,7 @@ from papertalk.utils import scholar
 from papertalk.utils.mendeley import mendeley_client as mc
 import re
 
+
 class Site(object):
     """
     Scrapes the site and returns an article
@@ -29,6 +30,8 @@ class Site(object):
         Retrieve a list of articles from search text, title, author, and/or year
         """
         pass
+
+
 
 class Scholar(Site):
 
@@ -125,6 +128,17 @@ class Mendeley(Site):
             docs = docs[1:]
         return cls._parse(docs)
 
+    @classmethod
+    def _scrape(cls, soup):
+        """
+        function to implement when extending module
+        """
+        pass
+
+    @classmethod
+    def scrape(cls, url):
+        ##TODO: actually scrape the url using the above _scrape method
+        return {"url": url}
 
 class SSRN(Site):
 
@@ -136,3 +150,17 @@ class SSRN(Site):
     @classmethod
     def search(cls, text=None, title=None, author=None, year=None, items=10):
         pass
+
+class Arxiv(Site):
+
+    @classmethod
+    def _scrape(cls, soup):
+        ##TODO
+        pass
+
+class PDF(Site):
+
+    @classmethod
+    def scrape(cls, url):
+
+        return ''

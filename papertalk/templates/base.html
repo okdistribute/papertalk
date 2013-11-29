@@ -32,10 +32,10 @@
 
     <!-- Add your site or application content here -->
     <div class="wrap">
-        {% if page != "index" %} 
-        {% include "_navbar.html" %}
-        {% endif %}
         <div id="main" class="container">
+            {% if page != "index" %}
+                {% include "_navbar.html" %}
+            {% endif %}
             {% block content %}
             {% endblock %}
         </div>
@@ -58,6 +58,7 @@
     </div>
 
 
+    <script src="{{ static('js/main.js')}}" type="text/javascript"></script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
@@ -66,5 +67,12 @@
       g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
       s.parentNode.insertBefore(g,s)}(document,'script'));
     </script>
+        {% if page != "index" %} 
+    <style type='text/css'>@import url('http://getbarometer.s3.amazonaws.com/assets/barometer/css/barometer.css');</style>
+    <script src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' type='text/javascript'></script>
+    <script type="text/javascript" charset="utf-8">
+      BAROMETER.load('NqPn9ykHyeM3YH8TKmyyD');
+    </script>
+     {% endif %}
   </body>
 </html>

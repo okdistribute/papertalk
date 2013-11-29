@@ -4,7 +4,8 @@
 }
 
 #papersites > img {
-    width: 150px;
+    height: 50px;
+
 }
 
 html, body {
@@ -19,6 +20,7 @@ html, body {
     height: 40px;
 
 }
+
 
 #main {
     overflow:auto;
@@ -63,7 +65,7 @@ p {
 
 .header {
     padding-bottom: 9px;
-    margin: 40px 0 20px;
+    margin: 30px 0 20px;
 }
 
 .header-title {
@@ -95,6 +97,10 @@ p {
     height: 40px;
 }
 
+#overlay_header {
+    height: 32px !important;
+}
+
 @media (max-width: 780px) {
 
     #papersites > img {
@@ -111,3 +117,4 @@ p {
         width: 50px;
     }
 }
+

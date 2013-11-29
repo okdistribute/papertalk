@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% import "macros/ui.html" as ui %}
+{% if form.errors %}
+    <ul class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="col-md-6 col-md-offset-3">
+    <h1>let's papertalk</h1>
+    <form class="form-horizontal" method="POST" action="/article/new" role="form">
+        {{ui.render_field(form.csrf_token)}}
+        <input name="url"
+               type="text"
+               class="form-control"
+               value="{{ url }}"
+               placeholder="URL">
+        <input name="title"
+               type="text"
+               class="form-control"
+               value="{{ title }}"
+               placeholder="Title">
+        <input name="authors"
+               type="text"
+               class="form-control"
+               value="{{ authors }}"
+               placeholder="Authors" />
+        <input name="year"
+               type="text"
+               class="form-control"
+               value="{{ year }}"
+               placeholder="Year" />
+        <hr>
+        <div class="row pull-right">
+            <button class="btn btn-primary btn-large" type="submit">Create</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

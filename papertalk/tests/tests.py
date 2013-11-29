@@ -1,8 +1,8 @@
 __author__ = 'karissamckelvey'
 import unittest
 import json
-from models.sites import Scholar, Mendeley
-from tests import PapertalkTestCase
+from papertalk.models.sites import Scholar, Mendeley
+from papertalk.tests import PapertalkTestCase
 
 class TestArticle(PapertalkTestCase):
 
@@ -23,10 +23,11 @@ class TestArticle(PapertalkTestCase):
         text = "visualizing communication on social media: making big data accessible"
         articles = Mendeley.search(text)
         self.assertGreater(len(articles), 0)
-        article = articles[0]
-        self.assertEqual(article["title"], "Visualizing Communication on Social Media: Making Big Data Accessible")
-        self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
-        self.assertEqual(article["year"], 2012)
+        for article in articles:
+            if article['title'] == "Visualizing Communication on Social Media: Making Big Data Accessible":
+                self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
+                self.assertEqual(article["year"], 2012)
+
 
     def testSaveArticle(self):
         """
@@ -35,22 +36,17 @@ class TestArticle(PapertalkTestCase):
         text = "visualizing communication on social media: making big data accessible"
         res = self.client.get("/article/search?query=%s" % text)
         self.assert200(res)
-        self.assertIn('visualizing', res.data)
-
-        article = self.get_article()
-        self.assertEqual(article["authors"], ["Karissa McKelvey", "Alex Rudnick", "Michael D Conover", "Filippo Menczer"])
+        self.assertIn('visualizing communication', res.data)
 
     def testViewArticle(self):
         """
         View the article
         """
         article = self.get_article()
+        print article
 
-        res = self.client.get("/article/%s" % article["_id"])
+        res = self.client.get("/article/view/%s" % article["_id"])
         self.assert200(res)
-
-        res = self.client.get("/article/notaproperid")
-        self.assert400(res)
 
 class TestReaction(PapertalkTestCase):
 
@@ -59,12 +55,20 @@ class TestReaction(PapertalkTestCase):
         Should be able to create a reaction
         """
         article = self.get_article()
-        res = self.client.post("/reaction/new", data=dict(
-          title="this is a reaction title",
-          article_id=article["_id"],
-          text="reaction text here"
-        ))
+
+        res = self.client.get("/article/view/%s" % article["_id"])
         self.assert200(res)
+
+        token = self.csrf_token(res)
+
+        res = self.client.post("/article/%s/reaction" % article["_id"],
+                data=dict(
+                  csrf_token=token,
+                  title="this is a reaction title",
+                  text="reaction text here"
+                ))
+        self.assert200(res)
+
 
         res = self.client.get('/reaction/%s' % json.loads(res.data)["id"])
         self.assert200(res)

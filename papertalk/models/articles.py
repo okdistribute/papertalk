@@ -24,12 +24,18 @@ def update(article, *E, **doc):
                                 {"$set": doc},
                                 safe=True)
 
-def save(**doc):
+def save(url=None, title=None, authors=None, year=None, **doc):
     """
     Called to save an article.
     """
-    canon = utils.canonicalize(doc['title'])
-    doc.update({"canon": canon})
+    if type(authors) == str:
+        authors = [a.strip() for a in authors.split(',')]
+
+    canon = utils.canonicalize(title)
+    doc.update({"canon": canon,
+                "title": title,
+                "authors": authors,
+                "year": year})
 
     _id = g.db.articles.insert(doc, safe=True)
     return _id

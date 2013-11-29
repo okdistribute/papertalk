@@ -16,21 +16,24 @@
     </div>
     <div class="row">
         <div class="col-lg-6 col-lg-offset-3">
-                <form action="/article/search" id="articleForm" method="GET">
+                <form action="" id="articleForm" method="GET">
                     <div class="input-group">
                         <input type="text" name="query" class="form-control" id="articleInput" placeholder="e.g. collective dynamics watts">
                         <input type="hidden" name="site" id="siteInput" value="unknown">
                         <span class="input-group-btn">
-                            <button class="btn btn-primary btn-large" type="submit" id="articleGo">search</button>
+                            <button class="btn btn-primary btn-large" type="submit" id="articleGo">papertalk</button>
                         </span>
                     </div>
                 </form>
             <div id="status"></div>
+            <div id="papersites" class="panel-body">
+                <p class="muted"> or a link to an article on the web</p>
+                 <img src="/static/img/logo-mendeley.png" class="faded" id="mendeley"/>
+                 <!--<img src="/static/img/ssrn-logo.png" class="faded" id="ssrn"/>-->
+                 <img src="/static/img/pdf.png" class="faded" id="pdf"/>
+            </div>
         </div>
     </div>
 </div>
 
-
-<script src="{{ static('/js/site.js')}} " type="text/javascript"></script>
-<script src="{{ static('/js/main.js')}}" type="text/javascript"></script>
 {% endblock %}

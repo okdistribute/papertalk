@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<span class="article-title"><a href="{{article.url}}">{{article.title}}</a></span>
-
-<div class="authors">
-	{% for a in article.authors %} 
-		<span class="author">{{a}}</span>
-		{% if not loop.last %}, {% endif %}
-	{% endfor %}
+<div class="col-md-8 col-md-offset-2">
+<h1 class="article-title">{{article.title}} 
 	<span class="year">{{article.year}}</span>
-</div>
+</h1>
+<h4>
+	{% for a in article.authors %} 
+    {{a}}{% if not loop.last %}, {% endif %}
+	{% endfor %}
+</h4>
+<a href="{{article.url}}">URL</a>
+<hr>
+{{ reactions.count() }} Reactions
 
-<div>
-    <h2>Reactions</h2>
-    <a class="btn btn-primary btn-large" 
-        type="button" 
-        id="reactionNew" 
+    <a class="pull-right"
+        type="button"
+        id="reactionNew"
         href="/article/{{article._id}}/reaction">New Reaction
     </a>
-
     <ul>
         {% for reaction in reactions %}
         <li>
@@ -29,9 +29,19 @@
         {% endfor %}
     </ul>
 </div>
+<div class="col-md-4">
+<!--
+    <a class="btn btn-primary btn-large"
+        type="button"
+        id="declareAuthor"
+        href="#">I am an author (coming soon)
+    </a>
+<div class="col-md-6">
+    {% include "_disqus.html" %}
+</div>
+-->
 
-{% include "_disqus.html" %}
-
+</div>
 <script src="{{url_for('static', filename='js/article.js')}}"></script>
 {% endblock %}
 

@@ -1,8 +1,0 @@
-#!/bin/sh
-
-if [ "$FLASK_ENV" == "development" ]; then
-        python papertalk/server.py
-else
-        gunicorn papertalk.wsgi:app
-fi
-

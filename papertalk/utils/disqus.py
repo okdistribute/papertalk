@@ -33,7 +33,7 @@ def get(user, article, reaction=None):
 def get_sso_script(user):
     # create a JSON packet of our data attributes
     data = simplejson.dumps({
-        'id': user.get('google_id', None),
+        'id': str(user.get('_id', None)),
         'username': user.get('username', None),
         'email': user.get('email', None)
     })
