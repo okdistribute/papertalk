@@ -28,7 +28,8 @@ def save(url=None, title=None, authors=None, year=None, **doc):
     """
     Called to save an article.
     """
-    authors = [a.strip() for a in authors.split(',')]
+    if type(authors) == str:
+        authors = [a.strip() for a in authors.split(',')]
 
     canon = utils.canonicalize(title)
     doc.update({"canon": canon,
