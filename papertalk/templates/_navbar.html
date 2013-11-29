@@ -7,22 +7,23 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="/">Papertalk</a>
+    <a class="navbar-brand" href="/"><img src="{{static('img/papertalk.png')}}" height="20"/></a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <form class="navbar-form navbar-left" action="/article/search" role="search">
       <div class="form-group">
-        <input type="text" class="input-xlarge form-control" name="query" placeholder="Search">
+        <input type="text" class="input-xlarge form-control" name="query" placeholder="e.g. 'collective dynamics watts'">
       </div>
       <button type="submit" class="btn btn-default">search</button>
     </form>
   <div class="navbar-right">
       <ul class="nav navbar-nav">
           {% if current_user.is_authenticated() %}
+          <li><a href="/article/new"><i class="glyphicon glyphicon-plus"></i> papertalk </a></li>
           <li><a href="#">{{current_user['username']}}</a></li>
-          <li><a href="/logout">Logout</a></li>
+          <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> </a></li>
           {% else %}
           <li><a href="/login" style="padding-top: 10px;padding-bottom: 10px;">
               <!--<img src="{{static('img/google_signin.png')}}" />-->
@@ -34,7 +35,7 @@
 </div>
   </div><!-- /.navbar-collapse -->
 </nav>
-<div class="row">
+<div class="container">
     <ul class="pull-right nav navbar-nav">
         <li>
             <g:plus annotation="bubble" action="share"></g:plus>
