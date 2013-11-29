@@ -3,27 +3,32 @@ sites = [{"name": "scholar",\
         {"name": "mendeley",\
         "regex": ".*mendeley.com.*"},
         {"name": "pdf",\
-        "regex": """http://*.pdf"""},
+        "regex": """http.*\.pdf"""},
         {"name": "ssrn",\
         "regex": ".*ssrn.com.*"}]
 
 check_url = (url) ->
+    success = false
+    url_destination = false
     sites.forEach (site) ->
-        re = RegExp(site.regex)
-        articleForm = $("#articleForm")
-        siteField = $("#siteInput")
+        re = new RegExp(site.regex)
         if re.test(url)
             # url
-            console.log("url", site.name, url)
-            articleForm.attr("action", "/article/url")
             $("#" + site.name).removeClass("faded")
-            siteField.attr("value", "unknown")
+            success = true
+            url_destination = site.name
         else
             # search
-            console.log("search", url)
-            articleForm.attr("action", "/article/search")
             $("#" + site.name).addClass("faded")
-            siteField.attr("value", site.name)
+
+    if success
+      console.log("url")
+      $("#articleForm").attr("action", "/article/url")
+      $("#siteInput").attr("value", url_destination)
+    else
+      console.log("search")
+      $("#articleForm").attr("action", "/article/search")
+
 
 
 $("#articleInput").keyup () ->
