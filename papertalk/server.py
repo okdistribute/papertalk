@@ -43,7 +43,7 @@ def init_login(app):
     @login_blueprint.route('/oauth-authorized')
     @twitter.authorized_handler
     def oauth_authorized(resp):
-        next_url = request.args.get('next') or '/'
+        next_url = request.args.get('next')
         if resp is None:
             flash(u'You denied the request to sign in.')
             return redirect(next_url)
@@ -66,9 +66,9 @@ def init_login(app):
     @login_blueprint.route('/login')
     def login():
         if current_user.is_authenticated():
-            return redirect('/')
+            return request.referrer
 
-        callback_url = url_for('.oauth_authorized', next=request.args.get('next'))
+        callback_url = url_for('.oauth_authorized', next=request.args.get('next') or request.referrer)
 
         #callback_url = callback_url.replace("http://", "https://")
         #print callback_url
