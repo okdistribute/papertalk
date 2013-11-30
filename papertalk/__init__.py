@@ -1,6 +1,6 @@
 import urllib
 from pymongo import MongoClient
-from flask import current_app, session
+from flask import current_app
 
 def connect_db():
     c = current_app.config

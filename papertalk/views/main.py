@@ -1,5 +1,5 @@
-from flask import render_template, Blueprint, url_for, g, flash, request, redirect, session
-from flask_login import login_required, login_user, logout_user, current_user
+from flask import render_template, Blueprint, request, redirect, session
+from flask_login import login_required, logout_user
 
 main_blueprint  = Blueprint("main", __name__)
 
