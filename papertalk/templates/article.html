@@ -14,19 +14,23 @@
 <hr>
 {{ reactions.count() }} Reactions
 
-    <a class="pull-right"
+    <a class="btn btn-default pull-right"
         type="button"
         id="reactionNew"
         href="/article/{{article._id}}/reaction">New Reaction
     </a>
-    <ul>
+    <ul class="reactions-list">
         {% for reaction in reactions %}
         <li>
             <a href="/reaction/{{reaction._id}}">
-                <span class="reaction-title">{{reaction.title}}</span>
-                <span class="reaction-author">{{reaction.author}}</span>
-                <span class="reaction-created-at">{{reaction.created_at}}</span>
-            </a>
+        <h3>
+            <span class="reaction-title">{{reaction.title}}</span>
+        </h3>
+        <h5>
+           <span class="reaction-author">{{reaction.author}}</span>
+           <span class="reaction-created-at">{{reaction.created_at.strftime('%d %b %y')}}</span>
+        </h5>
+        </a>
         </li>
         {% endfor %}
     </ul>
