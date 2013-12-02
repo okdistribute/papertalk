@@ -7,9 +7,10 @@ except ImportError:
         import json
     except ImportError:
         raise ImportError
-import datetime
+from datetime import datetime
 from bson.objectid import ObjectId
 from werkzeug import Response
+import pytz
 
 
 def scrape(url):
@@ -23,6 +24,10 @@ def scrape(url):
     hdl = urllib2.urlopen(req)
     html = hdl.read()
     return html
+
+def utcnow():
+    now = datetime.utcnow()
+    return now.replace(tzinfo=pytz.utc)
 
 
 class MongoJsonEncoder(json.JSONEncoder):
