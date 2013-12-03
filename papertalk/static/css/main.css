@@ -77,10 +77,6 @@ p {
     font-size: 32px;
 }
 
-.reaction-title {
-    font-size: 32px;
-}
-
 .author {
     font-size: 26px;
 }
@@ -101,6 +97,30 @@ p {
     height: 32px !important;
 }
 
+.reactions-list li {
+    list-style: none;
+    margin: 5px;
+    padding:3px;
+}
+
+.reactions-list li:hover {
+}
+
+.reactions-list a {
+    color: inherit;
+}
+
+.reactions-list a:hover {
+    text-decoration: none;
+}
+
+.reaction-author {
+
+}
+
+.reaction-title {
+
+}
 @media (max-width: 780px) {
 
     #papersites > img {

@@ -76,9 +76,9 @@ def add():
 
     if request.method == "POST" and form.validate():
         _id = articles.save(url=form.url.data,
-                      title=form.title.data,
-                      authors=form.authors.data,
-                      year=form.year.data)
+                            title=form.title.data,
+                            authors=form.authors.data,
+                            year=form.year.data)
         return redirect("/article/view/%s" % _id)
 
     form = ArticleForm(request.form)

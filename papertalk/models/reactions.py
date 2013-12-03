@@ -7,6 +7,7 @@ User (str)
 from bson.objectid import ObjectId
 from flask import g
 import articles
+from papertalk.utils import utcnow
 
 def update(_id, *E, **doc):
     """
@@ -14,19 +15,22 @@ def update(_id, *E, **doc):
     """
     doc.update(*E)
 
+    doc.update(modified_at=utcnow())
+
     return g.db.reactions.update({"_id" : ObjectId(_id)},
                                    {"$set": doc},
                                     safe=True)
 
 
-def save(title=None, body=None, article_id=None, username=None, **doc):
+def save(title=None, body=None, article_id=None, author=None, **doc):
     """
     Called to save the reaction.
     """
-    doc.update({"title": title,
-                "body": body,
-                "username": username,
-                "article_id": ObjectId(article_id)})
+    doc.update(title=title,
+               body=body,
+               author=author,
+               created_at=utcnow(),
+               article_id=ObjectId(article_id))
 
     _id = g.db.reactions.insert(doc, safe=True)
 
