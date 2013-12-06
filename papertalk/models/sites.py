@@ -113,7 +113,6 @@ class Mendeley(Site):
                 a['authors'] = ["%s %s" % (author['forename'], author['surname']) for author in authors]
             a['url'] = a['mendeley_url']
             a['source_id'] = a['uuid']
-            a['canonical_title'] = utils.canonicalize(a['title'])
             res.append(a)
 
         return res
@@ -124,8 +123,6 @@ class Mendeley(Site):
         client = mc.create_client()
         results = client.search(text, items=items)
         docs = results["documents"]
-        if docs and "Getting Started with Mendeley" in docs[0]["title"]:
-            docs = docs[1:]
         return cls._parse(docs)
 
     @classmethod

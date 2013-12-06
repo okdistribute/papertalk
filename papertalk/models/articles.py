@@ -24,14 +24,13 @@ def update(article, *E, **doc):
                                 {"$set": doc},
                                 safe=True)
 
-def save(url=None, title=None, authors=None, year=None, **doc):
+def save(url=None, canon=None, title=None, authors=None, year=None, **doc):
     """
     Called to save an article.
     """
     if type(authors) == str:
         authors = [a.strip() for a in authors.split(',')]
 
-    canon = utils.canonicalize(title)
     doc.update({"canon": canon,
                 "title": title,
                 "authors": authors,
@@ -41,7 +40,7 @@ def save(url=None, title=None, authors=None, year=None, **doc):
     return _id
 
 
-def lookup(_id=None, title=None, year=None,
+def lookup(_id=None, canon=None, year=None,
            query=None, mult=False):
     """
     Lookup an article in our db
@@ -53,8 +52,8 @@ def lookup(_id=None, title=None, year=None,
         if _id:
             query["_id"] =  ObjectId(_id)
 
-        elif title:
-            query["canon"] = utils.canonicalize(title)
+        elif canon:
+            query["canon"] = canon
             if year:
                 query["year"] = year
 
@@ -73,9 +72,10 @@ def get_or_insert(articles):
 
     res = {}
 
+    i = 0
     for a in articles:
-        our_article = lookup(title=a['title'],
-                             year=a['year'],
+        a['canon'] = utils.canonicalize(a['title'])
+        our_article = lookup(canon=a['canon'],
                              mult=False)
 
         if our_article:
@@ -85,5 +85,10 @@ def get_or_insert(articles):
             _id = save(**a)
             res[_id] = lookup(_id=_id)
 
-    return res.values()
+        a['i'] = i
+        i += 1
+
+    l = res.values()
+    return sorted(l, key=lambda x: x['i'])
+
 

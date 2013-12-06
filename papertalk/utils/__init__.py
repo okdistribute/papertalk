@@ -57,8 +57,9 @@ def canonicalize(title):
             return ''
 
         res = s.lower().strip() ## lowercase and remove outer spaced
-        res = re.sub("\s", '-', res) ## remove spaces
-        res = re.sub('["`\']', '\'', res) ## normalize quotes
+        res = re.sub("\s", '', res) ## remove spaces
+        res = re.sub("""["`'.&]""", '', res) ## normalize quotes
+        res = re.sub("""[&apos;]""", '', res) ## weird unicode found on mendeley articles
 
         return res
 

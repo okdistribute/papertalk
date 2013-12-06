@@ -27,10 +27,11 @@ def search():
     text = request.args.get("query")
 
     search_results = Mendeley.search(text)
+    articles_results = articles.get_or_insert(search_results)
 
     return render_template("results.html",
                            query=text,
-                           articles=articles.get_or_insert(search_results))
+                           articles=articles_results)
 
 
 @article_blueprint.route("/article/lookup", methods=["GET"])
