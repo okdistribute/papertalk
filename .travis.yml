@@ -12,4 +12,4 @@ before_script:
   - export PYTHONPATH=`pwd`
   
 # command to run tests
-script: python papertalk/tests.py 
+script: python papertalk/tests/tests.py 
