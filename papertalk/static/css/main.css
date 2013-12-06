@@ -21,6 +21,15 @@ html, body {
 
 }
 
+.navbar > #articleInput {
+    width: 400px !important;
+}
+
+.navbar {
+    background-image: none !important;
+    background-color: white;
+}
+
 
 #main {
     overflow:auto;
@@ -120,6 +129,10 @@ p {
 
 .reaction-title {
 
+}
+
+.muted {
+    color: #666;
 }
 @media (max-width: 780px) {
 
