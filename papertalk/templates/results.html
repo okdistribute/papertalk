@@ -31,4 +31,12 @@
 
     </ul>
 
+<ul class="pagination">
+    <li><a href="{{ url_for('article.search', page=page - 1)}}">&laquo;</a></li>
+    {% for url in pages %}
+        <li class="{{ "active" if url[0] == page}}"> <a href="{{ url[1] }}">{{ url[0]}}</a></li>
+    {% endfor %}
+    <li><a href="{{ url_for('article.search', page=page + 1) }}">&raquo;</a></li>
+</ul>
+
 {% endblock %}

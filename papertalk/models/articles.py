@@ -74,6 +74,7 @@ def get_or_insert(articles):
 
     i = 0
     for a in articles:
+        a['i'] = i
         a['canon'] = utils.canonicalize(a['title'])
         our_article = lookup(canon=a['canon'],
                              mult=False)
@@ -85,7 +86,6 @@ def get_or_insert(articles):
             _id = save(**a)
             res[_id] = lookup(_id=_id)
 
-        a['i'] = i
         i += 1
 
     l = res.values()

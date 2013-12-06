@@ -18,19 +18,36 @@ def view(_id):
     return render_template('article.html', **context)
 
 
-@article_blueprint.route("/article/search", methods=["GET"])
-def search():
+@article_blueprint.route("/article/search/<page>", methods=["GET"])
+def search(page):
     """
     Parses the article from a given search string.
     This could be a title (most likely); or an author
     """
-    text = request.args.get("query")
+    query = request.args.get("query")
+    page = int(page)
 
-    search_results = Mendeley.search(text)
+    search_results = Mendeley.search(query, page=page)
     articles_results = articles.get_or_insert(search_results)
 
+    pages = []
+    if (page - 5) <= 0:
+        lower = 1
+        upper = 10
+    else:
+        lower = page - 5
+        upper = page + 5
+
+    ## get pages
+    for i in xrange(lower, upper):
+        url = url_for('article.search', page=i, query=query)
+        pages.append((i, url))
+
+
     return render_template("results.html",
-                           query=text,
+                           pages=pages,
+                           page=page,
+                           query=query,
                            articles=articles_results)
 
 

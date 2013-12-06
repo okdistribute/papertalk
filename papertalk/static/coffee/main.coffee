@@ -27,7 +27,7 @@ check_url = (url) ->
       $("#siteInput").attr("value", url_destination)
     else
       console.log("search")
-      $("#articleForm").attr("action", "/article/search")
+      $("#articleForm").attr("action", "/article/search/1")
 
 
 
