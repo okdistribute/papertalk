@@ -3,49 +3,22 @@
 {% block content %}
 <div class="col-md-8 col-md-offset-2">
 <h1 class="article-title">{{article.title}} 
-	<span class="year">{{article.year}}</span>
+	<span class="year">({{article.year}})</span>
+    <small><a href="{{article.url}}"><div class="glyphicon glyphicon-new-window"></div></a></small>
 </h1>
 <h4>
 	{% for a in article.authors %} 
     {{a}}{% if not loop.last %}, {% endif %}
 	{% endfor %}
 </h4>
-<a href="{{article.url}}">URL</a>
-<hr>
-{{ reactions.count() }} Reactions
-
-    <a class="btn btn-default pull-right"
-        type="button"
-        id="reactionNew"
-        href="/article/{{article._id}}/reaction">New Reaction
-    </a>
-    <ul class="reactions-list">
-        {% for reaction in reactions %}
-        <li>
-            <a href="/reaction/{{reaction._id}}">
-        <h3>
-            <span class="reaction-title">{{reaction.title}}</span>
-        </h3>
-        <h5>
-           <span class="reaction-author">{{reaction.author}}</span>
-           <span class="reaction-created-at">{{reaction.created_at.strftime('%d %b %y')}}</span>
-        </h5>
+<!--        <a class="btn btn-primary btn-large"
+           type="button"
+           id="declareAuthor"
+           href="#">I am an author (coming soon)
         </a>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-<div class="col-md-4">
-<!--
-    <a class="btn btn-primary btn-large"
-        type="button"
-        id="declareAuthor"
-        href="#">I am an author (coming soon)
-    </a>
-<div class="col-md-6">
+        -->
+<hr>
     {% include "_disqus.html" %}
-</div>
--->
 
 </div>
 <script src="{{url_for('static', filename='js/article.js')}}"></script>
