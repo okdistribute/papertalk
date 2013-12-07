@@ -4,7 +4,9 @@
 <div class="col-md-8 col-md-offset-2">
 <h1 class="article-title">{{article.title}} 
 	<span class="year">({{article.year}})</span>
-    <small><a href="{{article.url}}"><div class="glyphicon glyphicon-new-window"></div></a></small>
+    <small><a href="{{article.url}}" target="_blank">
+        <i class="glyphicon glyphicon-new-window"></i>
+    </a></small>
 </h1>
 <h4>
 	{% for a in article.authors %} 
