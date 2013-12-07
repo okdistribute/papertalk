@@ -18,7 +18,7 @@
         <div class="col-lg-6 col-lg-offset-3">
                 <form action="" id="articleForm" method="GET">
                     <div class="input-group">
-                        <input type="text" name="query" class="form-control" id="articleInput" placeholder="e.g. collective dynamics watts">
+                        <input type="text" name="query" class="form-control" id="articleInput" placeholder="title, author, or link to a paper">
                         <input type="hidden" name="site" id="siteInput" value="unknown">
                         <span class="input-group-btn">
                             <button class="btn btn-primary btn-large" type="submit" id="articleGo">go</button>
@@ -27,10 +27,9 @@
                 </form>
             <div id="status"></div>
             <div id="papersites" class="panel-body">
-                <p class="muted">search for a paper or link to an article on the web</p>
-                 <img src="/static/img/logo-mendeley.png" class="faded" id="mendeley"/>
-                 <img src="/static/img/ssrn-logo.png" class="faded" id="ssrn"/>
-                 <img src="/static/img/pdf.png" class="faded" id="pdf"/>
+                 <img src="/static/img/logo-mendeley.png" class="hidden" id="mendeley"/>
+                 <img src="/static/img/ssrn-logo.png" class="hidden" id="ssrn"/>
+                 <img src="/static/img/pdf.png" class="hidden" id="pdf"/>
             </div>
         </div>
     </div>
