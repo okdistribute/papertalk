@@ -75,22 +75,25 @@ def url():
     site = request.args.get("site")
     url = request.args.get("query", '')
 
-    if site == "mendeley":
-        article = Mendeley.scrape(url)
+    if site == "ssrn":
+        article = SSRN.from_url(url)
+    elif site == "arxiv":
+        article = Arxiv.from_url(url)
+    if site == "pubmed":
+        article = PubMed.from_url(url)
     else:
-        article = {"url": url}
+        form = ArticleForm(request.form)
+        c = {}
+        c['form'] = form
+        return render_template("article_form.html", **c)
 
-    form = ArticleForm(request.form)
+    _id = articles.save(**article)
 
-    c = {}
-    c['form'] = form
-    c.update(article)
+    return redirect(url_for('article.view', _id=_id))
 
-    return render_template("article_form.html", **c)
-
-@login_required
 @article_blueprint.route('/article/new', methods=["GET", "POST"])
-def add():
+@login_required
+def new():
     """
     Creates a new article
     """
