@@ -38,13 +38,14 @@ def save(url=None, canon=None, title=None, authors=None, year=None, **doc):
     """
     Called to save an article.
     """
-    if type(authors) == str:
+    if type(authors) is unicode:
         authors = [a.strip() for a in authors.split(',')]
 
     doc.update({"canon": canon,
                 "title": title,
                 "authors": authors,
-                "year": year})
+                "year": year,
+                "url": url})
 
     _id = g.db.articles.insert(doc, safe=True)
     return _id

@@ -12,7 +12,7 @@ article_blueprint = Blueprint("article", __name__)
 def view(_id):
     context = {}
     a = articles.lookup(_id=_id)
-    if "abstract" not in a and "mendeley_url" in a:
+    if "abstract" not in a and "uuid" in a:
         a = articles.get_details(a)
 
     context["article"] = a
