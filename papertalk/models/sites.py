@@ -77,11 +77,23 @@ class Scholar(Site):
         search_results = scholarQuerier.articles
         for sr in search_results:
             sr['search_source'] = 'scholar'
-            sr['canonical_title'] = utils.canonicalize(sr['title'])
 
         return search_results
 
 class Mendeley(Site):
+
+
+    @classmethod
+    def _parse_article(cls, a):
+        """
+        Parses the article
+        """
+        authors = a['authors']
+        if authors:
+            a['firstauthor_surname'] = authors[0]['surname']
+            a['authors'] = ["%s %s" % (author['forename'], author['surname']) for author in authors]
+        a['url'] = a['mendeley_url']
+        return a
 
     @classmethod
     def _parse(cls, documents):
@@ -108,11 +120,7 @@ class Mendeley(Site):
         """
         res = []
         for a in documents:
-            authors = a['authors']
-            if authors:
-                a['firstauthor_surname'] = authors[0]['surname']
-                a['authors'] = ["%s %s" % (author['forename'], author['surname']) for author in authors]
-            a['url'] = a['mendeley_url']
+            a = cls._parse_article(a)
             res.append(a)
 
         return res
@@ -126,10 +134,15 @@ class Mendeley(Site):
         return cls._parse(docs)
 
     @classmethod
-    def details(cls, id, type):
+    def details(cls, id, type=None):
         client = mc.create_client()
         results = client.details(id, type=type)
-        return results
+        try:
+            article = cls._parse_article(results)
+            article[type] = id
+            return article
+        except:
+            return None
 
     @classmethod
     def _scrape(cls, soup):
