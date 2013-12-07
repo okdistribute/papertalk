@@ -130,8 +130,11 @@ class Mendeley(Site):
     def search(cls, text=None, title=None, author=None, year=None, page=0):
         client = mc.create_client()
         results = client.search(text, page=page+1)
-        docs = results["documents"]
-        return cls._parse(docs)
+        try:
+            docs = results["documents"]
+            return cls._parse(docs)
+        except:
+            return []
 
     @classmethod
     def details(cls, id, type=None):
