@@ -21,10 +21,10 @@
                <span class="year">{{ article['year'] }}</span>
 
            </h2>
+            </a>
            <h3>
-           {{ article['reactions']|length }} Reactions</a>
-           |
-           <a class="direct_url" href="{{article['url']}}" target="_blank">URL</a>
+           <a class="direct_url" href="{{article['mendeley_url']}}" target="_blank">
+               </a>
            </h3>
        </li>
     {% endfor %}
