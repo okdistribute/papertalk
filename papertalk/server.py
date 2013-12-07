@@ -127,13 +127,15 @@ def make_app():
         return response
 
     @app.context_processor
-    def inject_user():
+    def inject_context():
         try:
-            user = {'current_user': current_user}
+            context = {'current_user': current_user}
         except AttributeError:
-            user = {'current_user': None}
+            context = {'current_user': None}
 
-        return user
+        context['ga_id'] = app.config['GA_ID']
+
+        return context
 
     register_blueprints(app)
     init_login(app)
