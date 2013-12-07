@@ -3,6 +3,9 @@
 {% block content %}
 
    <h1>Mendeley results for "{{query}}"</h1>
+    <p>
+    Can't find your paper? Try <a href="/article/url">creating one</a>.
+    </p>
     <ul class="article-results list-group">
    {% for article in articles %}
        <li class="list-group-item">

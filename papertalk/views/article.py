@@ -72,7 +72,7 @@ def url():
     Scrapes the url and returns a new article
     """
     site = request.args.get("site")
-    url = request.args.get("query")
+    url = request.args.get("query", '')
 
     if site == "mendeley":
         article = Mendeley.scrape(url)
