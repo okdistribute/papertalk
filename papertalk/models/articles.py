@@ -34,10 +34,17 @@ def update(article, *E, **doc):
                                 {"$set": doc},
                                 safe=True)
 
-def save(url=None, canon=None, title=None, authors=None, year=None, **doc):
+def save(url=None, title=None, authors=None, year=None, **doc):
     """
     Called to save an article.
     """
+
+    canon = utils.canonicalize(title)
+
+    possible_article = lookup(canon=canon)
+    if possible_article:
+        return possible_article['_id']
+
     if type(authors) is unicode:
         authors = [a.strip() for a in authors.split(',')]
 
