@@ -79,11 +79,15 @@ def url():
         article = SSRN.from_url(url)
     elif site == "arxiv":
         article = Arxiv.from_url(url)
-    if site == "pubmed":
+    elif site == "pubmed":
         article = PubMed.from_url(url)
     else:
-        form = ArticleForm(request.form)
-        c = {}
+        article = None
+
+
+    if not article:
+        form = ArticleForm()
+        c = {"url" :url}
         c['form'] = form
         return render_template("article_form.html", **c)
 
