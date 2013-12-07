@@ -1,5 +1,5 @@
 from flask import render_template, request, Blueprint, redirect, flash, url_for
-from flask_login import current_user
+from flask_login import current_user,login_required
 from papertalk import utils
 from papertalk.utils import disqus
 from papertalk.models.sites import Mendeley
@@ -66,7 +66,8 @@ def lookup():
     return utils.jsonify({"article": articles.lookup(title=title, year=year)})
 
 
-@article_blueprint.route('/article/url', methods=["GET"])
+@login_required
+@article_blueprint.route('/article/url')
 def url():
     """
     Scrapes the url and returns a new article
@@ -87,6 +88,7 @@ def url():
 
     return render_template("article_form.html", **c)
 
+@login_required
 @article_blueprint.route('/article/new', methods=["GET", "POST"])
 def add():
     """
