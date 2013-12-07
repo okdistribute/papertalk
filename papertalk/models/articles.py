@@ -6,11 +6,11 @@ from flask import g
 
 def get_details(article):
     deets = Mendeley.details(article['uuid'])
-
-    del deets['authors']
-    update(article, **deets)
-
-    return lookup(article['_id'])
+    if deets:
+        del deets['authors']
+        update(article, **deets)
+        return lookup(article['_id'])
+    return article
 
 
 def add_reaction(_id, reaction_id):

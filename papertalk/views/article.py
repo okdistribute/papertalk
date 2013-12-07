@@ -12,6 +12,9 @@ article_blueprint = Blueprint("article", __name__)
 def view(_id):
     context = {}
     a = articles.lookup(_id=_id)
+    if not a:
+       return render_template('404.html')
+
     if "abstract" not in a and "uuid" in a:
         a = articles.get_details(a)
 
