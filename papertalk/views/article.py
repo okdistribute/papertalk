@@ -2,7 +2,7 @@ from flask import render_template, request, Blueprint, redirect, flash, url_for
 from flask_login import current_user,login_required
 from papertalk import utils
 from papertalk.utils import disqus
-from papertalk.models.sites import Mendeley
+from papertalk.models.sites import Mendeley, SSRN, Arxiv, PubMed
 from papertalk.models import reactions, articles
 from papertalk.forms import ArticleForm
 

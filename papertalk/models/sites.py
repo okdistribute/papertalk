@@ -1,4 +1,5 @@
 __author__ = 'karissamckelvey'
+import urlparse
 from BeautifulSoup import BeautifulSoup
 from papertalk import utils
 from papertalk.utils import scholar
@@ -125,9 +126,9 @@ class Mendeley(Site):
         return cls._parse(docs)
 
     @classmethod
-    def details(cls, mendeley_id):
+    def details(cls, id, type):
         client = mc.create_client()
-        results = client.details(mendeley_id)
+        results = client.details(id, type=type)
         return results
 
     @classmethod
@@ -138,31 +139,34 @@ class Mendeley(Site):
         pass
 
     @classmethod
-    def scrape(cls, url):
-        ##TODO: actually scrape the url using the above _scrape method
+    def from_url(cls, url):
         return {"url": url}
 
 class SSRN(Site):
 
     @classmethod
-    def _scrape(cls, soup):
-        ##TODO
-        pass
-
-    @classmethod
-    def search(cls, text=None, title=None, author=None, year=None, items=10):
-        pass
+    def from_url(cls, url):
+        parsed = urlparse.urlparse(url)
+        params = urlparse.parse_qs(parsed.query)
+        id = params['abstract_id']
+        return Mendeley.details(id, type='ssrn')
 
 class Arxiv(Site):
 
     @classmethod
-    def _scrape(cls, soup):
-        ##TODO
-        pass
+    def from_url(cls, url):
+        id = url.rsplit('/', 1)
+        return Mendeley.details(id, type='arxiv')
+
+class PubMed(Site):
+
+    @classmethod
+    def from_url(cls, url):
+        id = url.rsplit('/', 1)
+        return Mendeley.details(id, type='pmid')
 
 class PDF(Site):
 
     @classmethod
     def scrape(cls, url):
-
         return ''
