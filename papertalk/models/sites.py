@@ -112,7 +112,6 @@ class Mendeley(Site):
                 a['firstauthor_surname'] = authors[0]['surname']
                 a['authors'] = ["%s %s" % (author['forename'], author['surname']) for author in authors]
             a['url'] = a['mendeley_url']
-            a['source_id'] = a['uuid']
             res.append(a)
 
         return res
@@ -124,6 +123,12 @@ class Mendeley(Site):
         results = client.search(text, page=page+1)
         docs = results["documents"]
         return cls._parse(docs)
+
+    @classmethod
+    def details(cls, mendeley_id):
+        client = mc.create_client()
+        results = client.details(mendeley_id)
+        return results
 
     @classmethod
     def _scrape(cls, soup):

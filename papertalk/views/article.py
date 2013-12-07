@@ -2,7 +2,7 @@ from flask import render_template, request, Blueprint, redirect, flash, url_for
 from flask_login import current_user
 from papertalk import utils
 from papertalk.utils import disqus
-from papertalk.models.sites import Scholar, Mendeley
+from papertalk.models.sites import Mendeley
 from papertalk.models import reactions, articles
 from papertalk.forms import ArticleForm
 
@@ -11,7 +11,11 @@ article_blueprint = Blueprint("article", __name__)
 @article_blueprint.route('/article/view/<_id>')
 def view(_id):
     context = {}
-    context["article"] = articles.lookup(_id=_id)
+    a = articles.lookup(_id=_id)
+    if "abstract" not in a:
+        a = articles.get_details(a)
+
+    context["article"] = a
     context["reactions"] = reactions.lookup(article_id=_id, mult=True)
     context["disqus"] = disqus.get(current_user, context["article"])
 
@@ -70,9 +74,7 @@ def url():
     site = request.args.get("site")
     url = request.args.get("query")
 
-    if site == "scholar":
-        article = Scholar.scrape(url)
-    elif site == "mendeley":
+    if site == "mendeley":
         article = Mendeley.scrape(url)
     else:
         article = {"url": url}
