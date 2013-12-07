@@ -5,7 +5,11 @@ sites = [{"name": "scholar",\
         {"name": "pdf",\
         "regex": """http.*\.pdf"""},
         {"name": "ssrn",\
-        "regex": ".*ssrn.com.*"}]
+        "regex": ".*ssrn.com.*"},
+        {"name": "arxiv",\
+        "regex": ".*arxiv.org.*"},
+        {"name": "pubmed",\
+        "regex": ".*ncbi.nlm.nih.gov/pubmed/.*"}]
 
 check_url = (url) ->
     success = false
