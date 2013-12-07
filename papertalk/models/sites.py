@@ -161,21 +161,27 @@ class SSRN(Site):
     def from_url(cls, url):
         parsed = urlparse.urlparse(url)
         params = urlparse.parse_qs(parsed.query)
-        id = params['abstract_id']
+        id = params.get('abstract_id')
+        if not id:
+            parsed = url.rsplit('=', 1)
+            id = parsed[1]
+
         return Mendeley.details(id, type='ssrn')
 
 class Arxiv(Site):
 
     @classmethod
     def from_url(cls, url):
-        id = url.rsplit('/', 1)
+        parsed = url.rsplit('/', 1)
+        id = parsed[1]
         return Mendeley.details(id, type='arxiv')
 
 class PubMed(Site):
 
     @classmethod
     def from_url(cls, url):
-        id = url.rsplit('/', 1)
+        parsed = url.rsplit('/', 1)
+        id = parsed[1]
         return Mendeley.details(id, type='pmid')
 
 class PDF(Site):
