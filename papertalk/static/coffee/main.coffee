@@ -18,12 +18,12 @@ check_url = (url) ->
         re = new RegExp(site.regex)
         if re.test(url)
             # url
-            $("#" + site.name).removeClass("hidden")
+            $("#" + site.name).removeClass("faded")
             success = true
             url_destination = site.name
         else
             # search
-            $("#" + site.name).addClass("hidden")
+            $("#" + site.name).addClass("faded")
 
     if success
       console.log("url")
