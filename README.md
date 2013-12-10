@@ -1,4 +1,4 @@
-Papertalk: Discuss scholarly articles online.
+Papertalk: Discuss research online.
 =========
 
 Academic research is discussed all over the place - at conferences, in lab meetings, at departmental teas, on blogs, 
